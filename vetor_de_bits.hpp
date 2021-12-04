@@ -6,6 +6,7 @@ class vetor_de_bits
 {
     private:
         unsigned long tamanho;
+        unsigned long numero_de_bytes;
         byte* bits;
 
     public:
@@ -31,6 +32,8 @@ class vetor_de_bits
                 referencia_bit& flip();
         };
         referencia_bit operator[] (unsigned long indice);
+        void reset();
+        void set();
 };
 
 #endif

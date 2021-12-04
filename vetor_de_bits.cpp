@@ -5,7 +5,7 @@ using namespace std;
 
 vetor_de_bits::vetor_de_bits (unsigned long tamanho): tamanho (tamanho)
 {
-    unsigned long numero_de_bytes = tamanho/8 ;
+    numero_de_bytes = tamanho/8 ;
     bool tamanho_divisivel_por_oito = ( (7 + tamanho)/8 == numero_de_bytes);
 
     if (tamanho_divisivel_por_oito) numero_de_bytes++;
@@ -27,6 +27,20 @@ vetor_de_bits::operator[] (unsigned long indice)
         throw out_of_range("posicao do bit excede o tamanho do vetor de bits");
 };
 
+void 
+vetor_de_bits::reset()
+{
+    for (unsigned i = 0; i < numero_de_bytes; i++)
+        bits[i] = 0b00000000;
+}
+
+void 
+vetor_de_bits::set()
+{
+    for (unsigned i = 0; i < numero_de_bytes; i++)
+        bits[i] = 0b11111111;
+}
+
 vetor_de_bits::referencia_bit::referencia_bit (unsigned long indice, byte* bits_pai):
 indice_byte (indice/8), indice_bit(indice%8), bits_pai(bits_pai){}
 
@@ -35,9 +49,9 @@ vetor_de_bits::referencia_bit::operator=(bool value)
 {
     byte* byte_ = &( bits_pai[indice_byte] );
     if (value)
-        *byte_ = (*byte_) | ( 0b0001 << (indice_bit));
+        *byte_ = (*byte_) | ( 0b0001 << indice_bit);
     else
-        *byte_ = (*byte_) & ( (! 0b0001) << (indice_bit));
+        *byte_ = (*byte_) & ( ~ ( 0b0001 << indice_bit)  );
 
     return *this;
 }
@@ -52,7 +66,7 @@ bool
 vetor_de_bits::referencia_bit::operator~() const
 {
     bool value = (*this);
-    return ~value;
+    return !value;
 }
 
 vetor_de_bits::referencia_bit& 
