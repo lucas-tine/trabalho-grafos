@@ -1,9 +1,13 @@
 #ifndef GRAFO_HPP
 #define GRAFO_HPP
 
-abstract class Grafo
+class grafo
 {
+    private:
+        unsigned numero_de_vertices;
+        unsigned numero_de_arestas;
 
+    public: 
 
 };
 
