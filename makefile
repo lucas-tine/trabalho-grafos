@@ -3,17 +3,25 @@ LD = g++
 FLAGS = -std=c++11 -Wall
 
 OBJS = matriz_simetrica_bits.o	\
-		vetor_de_bits.o
+		vetor_de_bits.o			\
+		grafo_matriz.o			
 
-EXECS = teste_vetor_de_bits.exec
+TESTS = teste_vetor_de_bits.exe 	\
+		teste_matriz_simetrica.exe	\
+		teste_grafo_matriz.exe		
 
-all:	$(EXECS) $(OBJS)
+EXECS = 
 
-%.exec:	%.o $(OBJS)
+all:	$(OBJS) $(TESTS)
+
+%.exe:	%.o $(OBJS)
 	$(CC) $(FLAGS) $< $(OBJS) -o $@
 
-clean:
-	rm *.o $(EXECS)
-
-%.o:	%.cpp
+%.o:	source/%.cpp
 	$(LD) $(FLAGS) $< -c
+
+%.o:	tests/%.cpp
+	$(LD) $(FLAGS) $< -c
+
+clean:
+	rm *.o $(TESTS)

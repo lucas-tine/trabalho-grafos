@@ -1,4 +1,4 @@
-#include "vetor_de_bits.hpp"
+#include "../headers/vetor_de_bits.hpp"
 #include <stdexcept>
 
 using namespace std; 
@@ -8,7 +8,7 @@ vetor_de_bits::vetor_de_bits (unsigned long tamanho): tamanho (tamanho)
     numero_de_bytes = tamanho/8 ;
     bool tamanho_divisivel_por_oito = ( (7 + tamanho)/8 == numero_de_bytes);
 
-    if (tamanho_divisivel_por_oito) numero_de_bytes++;
+    if (not tamanho_divisivel_por_oito) numero_de_bytes++;
     
     this->bits = new byte [numero_de_bytes];
 
@@ -16,7 +16,20 @@ vetor_de_bits::vetor_de_bits (unsigned long tamanho): tamanho (tamanho)
         throw "alocacao de memoria mal-sucedida";
 }
 
-vetor_de_bits::~vetor_de_bits () { delete bits; }
+vetor_de_bits::vetor_de_bits ()
+{
+    this->tamanho = 0;
+    this->bits = nullptr;
+}
+
+vetor_de_bits::~vetor_de_bits () 
+{ 
+    if (bits != nullptr) 
+    {
+        //delete bits;  (erro estranho quando delete é usado)
+        bits = nullptr;
+    } 
+}
 
 vetor_de_bits::referencia_bit
 vetor_de_bits::operator[] (unsigned long indice) 
@@ -40,6 +53,7 @@ vetor_de_bits::set()
     for (unsigned i = 0; i < numero_de_bytes; i++)
         bits[i] = 0b11111111;
 }
+
 
 vetor_de_bits::referencia_bit::referencia_bit (unsigned long indice, byte* bits_pai):
 indice_byte (indice/8), indice_bit(indice%8), bits_pai(bits_pai){}

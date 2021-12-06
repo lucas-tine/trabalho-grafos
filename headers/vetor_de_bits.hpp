@@ -10,8 +10,12 @@ class vetor_de_bits
         byte* bits;
 
     public:
+        vetor_de_bits ();
         vetor_de_bits (unsigned long tamanho);
         ~vetor_de_bits ();
+        unsigned long tamanho_em_bytes() {return numero_de_bytes;};
+        unsigned long tamanho_em_bits() {return tamanho;}
+
         class referencia_bit
         {
             unsigned long indice_byte; 
