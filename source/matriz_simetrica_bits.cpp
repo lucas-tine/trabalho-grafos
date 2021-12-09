@@ -39,3 +39,17 @@ matriz_simetrica_bits::_referencia_linha_matriz::operator[] (unsigned coluna)
     posicao_no_vetor += indice_linha;
     return bits[posicao_no_vetor];
 }
+
+ostream& 
+operator<< (ostream& os, matriz_simetrica_bits matriz)
+{
+    for (unsigned i = 0; i < matriz.obter_tamanho(); i++)
+    {
+        for (unsigned j = 0; j < matriz.obter_tamanho(); j++)
+            {
+                cout << matriz[i][j]<< " ";
+            }
+        cout << endl;
+    }
+    return os;
+}

@@ -130,3 +130,11 @@ vetor_de_bits::referencia_bit::operator^=(bool value)
     *this = my_value;
     return *this;
 }
+
+ostream&
+operator<< (ostream& os, vetor_de_bits vetor)
+{
+    for (unsigned i = 0; i < vetor.tamanho_em_bits() ; i++)
+        os << vetor[i] ;
+    return os;
+}

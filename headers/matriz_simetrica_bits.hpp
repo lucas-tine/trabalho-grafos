@@ -18,7 +18,7 @@ class matriz_simetrica_bits
         ~matriz_simetrica_bits ();
         void reset() { return bits.reset();}
         void set ()  { return bits.set();}
-        unsigned get_tamanho (){ return tamanho;}
+        unsigned obter_tamanho (){ return tamanho;}
 
         class _referencia_linha_matriz
         {
@@ -34,6 +34,7 @@ class matriz_simetrica_bits
         };
 
         _referencia_linha_matriz operator[] (unsigned);
+        friend ostream& operator<< (ostream&, matriz_simetrica_bits);
 };
 
 #endif

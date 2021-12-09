@@ -22,13 +22,20 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
     }
 }
 
-void
-grafo_matriz::print_matriz_de_adjacencia ()
+bool
+grafo_matriz::adjacentes (unsigned long vertice1, unsigned long vertice2)
 {
-    for (unsigned i = 0; i < matriz_de_adjacencia.get_tamanho(); i++)
-    {
-        for (unsigned j = 0; j < matriz_de_adjacencia.get_tamanho(); j++)
-                cout << matriz_de_adjacencia[i][j];
-        cout << endl;
-    }
+    return (*this)[vertice1][vertice2];
+}
+
+ostream& 
+operator<< (ostream& os, grafo_matriz grafo)
+{
+    return (os << grafo.matriz_de_adjacencia);
+}
+
+matriz_simetrica_bits::_referencia_linha_matriz 
+grafo_matriz::operator[] (unsigned long vertice)
+{
+    return this->matriz_de_adjacencia[vertice];
 }

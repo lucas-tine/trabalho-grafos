@@ -1,3 +1,4 @@
+#include <iostream>
 #ifndef VETOR_DE_BITS_HPP
 #define VETOR_DE_BITS_HPP
 
@@ -38,6 +39,7 @@ class vetor_de_bits
         referencia_bit operator[] (unsigned long indice);
         void reset();
         void set();
+        friend std::ostream& operator<< (std::ostream&, vetor_de_bits);
 };
 
 #endif
