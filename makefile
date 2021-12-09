@@ -7,14 +7,16 @@ FLAGS = -std=c++11 -Wall
 OBJS = matriz_simetrica_bits.o	\
 		vetor_de_bits.o			\
 		grafo_matriz.o			\
-		grafo_lista.o
+		grafo_lista.o			\
+		grafo_vetor.o
 
 # Ao criar um novo programa para testes em geral, "teste_qualquer.exe", inclua-o
 # abaixo para que seja compilado ao comando "make"
 TESTS = teste_vetor_de_bits.exe 	\
 		teste_matriz_simetrica.exe	\
 		teste_grafo_matriz.exe		\
-		teste_grafo_lista.exe
+		teste_grafo_lista.exe		\
+		teste_grafo_vetor.exe
 
 # O(s) programa(s) oficial futuramente será definido aqui abaixo
 EXECS = 
@@ -29,9 +31,10 @@ EXECS =
 	$(LD) $(FLAGS) $< -c
 
 all:	$(OBJS) $(TESTS)
+	mv $(TESTS) tests/
 
 clean-objs:
 	rm *.o 
 
 clean: 
-	rm *.o $(TESTS) $(EXECS)
+	rm *.o tests/teste_*.exe $(EXECS)
