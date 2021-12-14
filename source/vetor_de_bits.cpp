@@ -3,7 +3,7 @@
 
 using namespace std; 
 
-vetor_de_bits::vetor_de_bits (unsigned long tamanho): tamanho (tamanho)
+vetor_de_bits::vetor_de_bits (contador tamanho): tamanho (tamanho)
 {
     numero_de_bytes = tamanho/8 ;
     bool tamanho_divisivel_por_oito = ( (7 + tamanho)/8 == numero_de_bytes);
@@ -32,7 +32,7 @@ vetor_de_bits::~vetor_de_bits ()
 }
 
 vetor_de_bits::referencia_bit
-vetor_de_bits::operator[] (unsigned long indice) 
+vetor_de_bits::operator[] (contador indice) 
 {
     if (indice < this->tamanho) 
         return referencia_bit (indice, this->bits );
@@ -43,19 +43,19 @@ vetor_de_bits::operator[] (unsigned long indice)
 void 
 vetor_de_bits::reset()
 {
-    for (unsigned i = 0; i < numero_de_bytes; i++)
+    for (contador i = 0; i < numero_de_bytes; i++)
         bits[i] = 0b00000000;
 }
 
 void 
 vetor_de_bits::set()
 {
-    for (unsigned i = 0; i < numero_de_bytes; i++)
+    for (contador i = 0; i < numero_de_bytes; i++)
         bits[i] = 0b11111111;
 }
 
 
-vetor_de_bits::referencia_bit::referencia_bit (unsigned long indice, byte* bits_pai):
+vetor_de_bits::referencia_bit::referencia_bit (contador indice, byte* bits_pai):
 indice_byte (indice/8), indice_bit(indice%8), bits_pai(bits_pai){}
 
 vetor_de_bits::referencia_bit& 
@@ -134,7 +134,7 @@ vetor_de_bits::referencia_bit::operator^=(bool value)
 ostream&
 operator<< (ostream& os, vetor_de_bits vetor)
 {
-    for (unsigned i = 0; i < vetor.tamanho_em_bits() ; i++)
+    for (contador i = 0; i < vetor.tamanho_em_bits() ; i++)
         os << vetor[i] ;
     return os;
 }

@@ -12,12 +12,12 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
 {
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
-    this->vetor_de_adjacencia = new set<unsigned long> [numero_de_vertices];
+    this->vetor_de_adjacencia = new set<vertice> [numero_de_vertices];
 
     if (this->vetor_de_adjacencia == nullptr) 
         throw bad_alloc ();
 
-    unsigned long vertice1, vertice2;
+    vertice vertice1, vertice2;
     while (arquivo >> vertice1 >> vertice2)
     {
         vertice1--;
@@ -35,7 +35,7 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
 }
 
 bool 
-grafo_vetor::adjacentes (unsigned long vertice1, unsigned long vertice2)
+grafo_vetor::adjacentes (vertice vertice1, vertice vertice2)
 {
     bool grau_do_vertice1_maior = 
             vetor_de_adjacencia[vertice1].size() > vetor_de_adjacencia[vertice2].size();
@@ -48,8 +48,8 @@ grafo_vetor::adjacentes (unsigned long vertice1, unsigned long vertice2)
         ( vetor_de_adjacencia[vertice2].find (vertice1) != vetor_de_adjacencia[vertice2].end());
 }
 
-set<unsigned long> 
-grafo_vetor::operator[] (unsigned long vertice)
+set<vertice> 
+grafo_vetor::operator[] (vertice vertice)
 {
     return this->vetor_de_adjacencia [vertice];
 }  
