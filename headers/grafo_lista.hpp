@@ -9,14 +9,14 @@ using namespace std;
 class grafo_lista: public grafo 
 {
     private:
-        forward_list<unsigned long> *lista_de_adjacencia ;
-        static bool contido (unsigned long, forward_list<unsigned long>);
+        forward_list<vertice> *lista_de_adjacencia ;
+        static bool contido (vertice, forward_list<vertice>);
 
     public:
         grafo_lista (string nome_do_arquivo);
         grafo_lista (ifstream& arquivo);
-        bool adjacentes (unsigned long, unsigned long) override;
-        forward_list<unsigned long> operator[] (unsigned long);
+        bool adjacentes (vertice, vertice) override;
+        forward_list<vertice> operator[] (vertice);
 };
 
 #endif

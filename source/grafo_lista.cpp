@@ -13,10 +13,10 @@ grafo_lista::grafo_lista (ifstream& arquivo)
 {
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
-    lista_de_adjacencia = new forward_list<unsigned long> [numero_de_vertices];
+    lista_de_adjacencia = new forward_list<vertice> [numero_de_vertices];
     if (lista_de_adjacencia == nullptr) throw bad_alloc ();
 
-    unsigned vertice1, vertice2;
+    vertice vertice1, vertice2;
     while (arquivo >> vertice1 >> vertice2)
     {
         vertice1--;
@@ -34,7 +34,7 @@ grafo_lista::grafo_lista (ifstream& arquivo)
 }
 
 bool 
-grafo_lista::adjacentes (unsigned long vertice1, unsigned long vertice2)
+grafo_lista::adjacentes (vertice vertice1, vertice vertice2)
 {
     bool grau_do_vertice1_maior = 
             lista_de_adjacencia[vertice1].max_size() > lista_de_adjacencia[vertice2].max_size();
@@ -46,14 +46,14 @@ grafo_lista::adjacentes (unsigned long vertice1, unsigned long vertice2)
        
 }
 
-forward_list<unsigned long> 
-grafo_lista::operator[] (unsigned long vertice)
+forward_list<vertice> 
+grafo_lista::operator[] (vertice vertice)
 {
     return this->lista_de_adjacencia[vertice];
 }
 
 bool
-grafo_lista::contido (unsigned long elemento, forward_list<unsigned long> lista)
+grafo_lista::contido (vertice elemento, forward_list<vertice> lista)
 {
     for (auto it = lista.begin(); it != lista.end() ; it++)
         if (*it == elemento)

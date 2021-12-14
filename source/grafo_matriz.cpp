@@ -14,7 +14,7 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
     matriz_de_adjacencia = matriz_simetrica_bits(numero_de_vertices);
     matriz_de_adjacencia.reset();
 
-    unsigned vertice1, vertice2;
+    vertice vertice1, vertice2;
     while (arquivo >> vertice1 >> vertice2)
     {
         matriz_de_adjacencia[vertice1-1][vertice2-1] = 1;
@@ -23,7 +23,7 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
 }
 
 bool
-grafo_matriz::adjacentes (unsigned long vertice1, unsigned long vertice2)
+grafo_matriz::adjacentes (vertice vertice1, vertice vertice2)
 {
     return (*this)[vertice1][vertice2];
 }
@@ -35,7 +35,7 @@ operator<< (ostream& os, grafo_matriz grafo)
 }
 
 matriz_simetrica_bits::_referencia_linha_matriz 
-grafo_matriz::operator[] (unsigned long vertice)
+grafo_matriz::operator[] (vertice vertice)
 {
     return this->matriz_de_adjacencia[vertice];
 }
