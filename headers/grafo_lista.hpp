@@ -17,6 +17,7 @@ class grafo_lista: public grafo
         grafo_lista (ifstream& arquivo);
         bool adjacentes (unsigned long, unsigned long) override;
         forward_list<unsigned long> operator[] (unsigned long);
+        void dfs(unsigned long);
 };
 
 #endif

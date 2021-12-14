@@ -18,5 +18,9 @@ main ()
         }
         cout << endl;
     }
+
+    cout << "DFS" << endl;
+    grafo.dfs(1);
+
     return EXIT_SUCCESS;
 }
