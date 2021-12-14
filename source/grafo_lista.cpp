@@ -80,7 +80,6 @@ grafo_lista::dfs (unsigned long vertice){
         pilha.pop();
         if(!visitado[v]){
             visitado[v] = true;
-            cout << v+1 << " -> ";
             for (auto it = lista_de_adjacencia[v].begin(); it != lista_de_adjacencia[v].end(); it++){
                 pilha.push(*it);
                 if(!visitado[*it]){
