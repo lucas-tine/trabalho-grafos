@@ -1,4 +1,5 @@
 #include "../headers/grafo_matriz.hpp"
+#include <stack>
 
 grafo_matriz::grafo_matriz (string nome_do_arquivo)
 {
@@ -38,4 +39,40 @@ matriz_simetrica_bits::_referencia_linha_matriz
 grafo_matriz::operator[] (unsigned long vertice)
 {
     return this->matriz_de_adjacencia[vertice];
+}
+
+void 
+grafo_matriz::dfs (unsigned long vertice){
+    vertice --;
+    bool visitado[numero_de_vertices];
+    unsigned long pai[numero_de_vertices], nivel[numero_de_vertices];
+    for (unsigned long i = 0; i < numero_de_vertices; i++){
+        visitado[i] = false;
+        pai[i] = 0;
+        nivel[i] = 0; //Tá errado! Mudar
+    }
+    stack<unsigned long> pilha;
+    pilha.push(vertice);
+    nivel[vertice] = 0;
+    while(!pilha.empty()){
+        unsigned long v = pilha.top();
+        pilha.pop();
+        if(!visitado[v]){
+            visitado[v] = true;
+            for (unsigned long i = 0; i < numero_de_vertices; i++){
+                if(matriz_de_adjacencia[v][i] == 1){
+                    pilha.push(i);
+                    if(!visitado[i]){
+                        pai[i] = v+1;
+                        nivel[i] = nivel[v] + 1;
+                    }
+                }
+            }
+        }
+    }
+    for(unsigned long i =0; i<6; i++)
+        cout << "pai[" << i+1 << "] = " << pai[i] << endl;
+    for(unsigned long i =0; i<6; i++)
+        cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
+    cout << endl;
 }

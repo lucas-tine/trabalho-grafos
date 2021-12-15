@@ -10,5 +10,8 @@ main ()
 
     cout << "matriz de adjacencia criada a partir de \"receita de grafo.txt\" :" << endl << 
     grafo << endl;
+
+    cout << "DFS" << endl;
+    grafo.dfs(1);
     return EXIT_SUCCESS;
 }

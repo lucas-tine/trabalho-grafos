@@ -17,7 +17,8 @@ class grafo_vetor: public grafo
         grafo_vetor (string nome_do_arquivo);
         grafo_vetor (ifstream& arquivo);
         bool adjacentes (unsigned long, unsigned long) override;
-        set<unsigned long> operator[] (unsigned long);  
+        set<unsigned long> operator[] (unsigned long);
+        void dfs (unsigned long);
 };
 
 #endif

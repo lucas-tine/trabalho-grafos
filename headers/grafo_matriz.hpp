@@ -19,6 +19,7 @@ class grafo_matriz: public grafo
         friend ostream& operator<< (ostream&, grafo_matriz);
         bool adjacentes (unsigned long vertice1, unsigned long vertice2) override;
         matriz_simetrica_bits::_referencia_linha_matriz operator[] (unsigned long vertice);
+        void dfs (unsigned long);
 };
 
 #endif
