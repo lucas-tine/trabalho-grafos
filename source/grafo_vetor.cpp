@@ -1,5 +1,6 @@
 #include "../headers/grafo_vetor.hpp"
 #include <fstream>
+#include <stack>
 
 grafo_vetor::grafo_vetor (string nome_do_arquivo)
 {
@@ -52,4 +53,38 @@ set<vertice>
 grafo_vetor::operator[] (vertice vertice)
 {
     return this->vetor_de_adjacencia [vertice];
-}  
+}
+
+void
+grafo_vetor::dfs (unsigned long vertice){
+    vertice --;
+    bool visitado[numero_de_vertices];
+    unsigned long pai[numero_de_vertices], nivel[numero_de_vertices];
+    for (unsigned long i = 0; i < numero_de_vertices; i++){
+        visitado[i] = false;
+        pai[i] = 0;
+        nivel[i] = 0; //Tá errado! Mudar
+    }
+    stack<unsigned long> pilha;
+    pilha.push(vertice);
+    nivel[vertice] = 0;
+    while(!pilha.empty()){
+        unsigned long v = pilha.top();
+        pilha.pop();
+        if(!visitado[v]){
+            visitado[v] = true;
+            for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++){
+                pilha.push(*it);
+                if(!visitado[*it]){
+                    pai[*it] = v+1;
+                    nivel[*it] = nivel[v] + 1;
+                }
+            }
+        }
+    }
+    for(unsigned long i =0; i<6; i++)
+        cout << "pai[" << i+1 << "] = " << pai[i] << endl;
+    for(unsigned long i =0; i<6; i++)
+        cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
+    cout << endl;
+}

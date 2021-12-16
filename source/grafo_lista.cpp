@@ -89,7 +89,6 @@ grafo_lista::dfs (unsigned long vertice){
             }
         }
     }
-    cout << endl;
     for(unsigned long i =0; i<6; i++)
         cout << "pai[" << i+1 << "] = " << pai[i] << endl;
     for(unsigned long i =0; i<6; i++)

@@ -18,6 +18,7 @@ class grafo_vetor: public grafo
         grafo_vetor (ifstream& arquivo);
         bool adjacentes (vertice, vertice) override;
         set<vertice> operator[] (vertice);  
+        void dfs (vertice);
 };
 
 #endif
