@@ -3,6 +3,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <stack>
+#include <queue>
 
 grafo_lista::grafo_lista (string nome_do_arquivo)
 {
@@ -64,8 +65,8 @@ grafo_lista::contido (vertice elemento, forward_list<vertice> lista)
 }
 
 void
-grafo_lista::dfs (vertice vertice_){
-    vertice_ --;
+grafo_lista::dfs (vertice inicio){
+    inicio--;
     vetor_de_bits visitado(numero_de_vertices);
     vertice pai[numero_de_vertices], nivel[numero_de_vertices];
     for (contador i = 0; i < numero_de_vertices; i++){
@@ -74,8 +75,8 @@ grafo_lista::dfs (vertice vertice_){
         nivel[i] = 0; //Tá errado! Mudar
     }
     stack<vertice> pilha;
-    pilha.push(vertice_);
-    nivel[vertice_] = 0;
+    pilha.push(inicio);
+    nivel[inicio] = 0;
     while(!pilha.empty()){
         vertice v = pilha.top();
         pilha.pop();
@@ -90,9 +91,41 @@ grafo_lista::dfs (vertice vertice_){
             }
         }
     }
-    for(contador i =0; i<6; i++)
+    for(contador i =0; i<numero_de_vertices; i++)
         cout << "pai[" << i+1 << "] = " << pai[i] << endl;
-    for(contador i =0; i<6; i++)
+    for(contador i =0; i<numero_de_vertices; i++)
+        cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
+    cout << endl;
+}
+
+void
+grafo_lista::bfs(vertice inicio){
+    inicio--;
+    vetor_de_bits visitado(numero_de_vertices);
+    vertice pai[numero_de_vertices], nivel[numero_de_vertices];
+    for(contador i = 0; i < numero_de_vertices; i++){
+        visitado[i] = false;
+        pai[i] = 0;
+        nivel[i] = 0;//Errado! Mudar
+    }
+    queue<vertice> fila;
+    visitado[inicio] = true;
+    fila.push(inicio);
+    while(!fila.empty()){
+        vertice v = fila.front();
+        fila.pop();
+        for (auto it = lista_de_adjacencia[v].begin(); it != lista_de_adjacencia[v].end(); it++){
+            if(!visitado[*it]){
+                visitado[*it] = true;
+                fila.push(*it);
+                pai[*it] = v+1;
+                nivel[*it] = nivel[v] + 1;
+            }
+        }
+    }
+    for(contador i =0; i<numero_de_vertices; i++)
+        cout << "pai[" << i+1 << "] = " << pai[i] << endl;
+    for(contador i =0; i<numero_de_vertices; i++)
         cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
     cout << endl;
 }

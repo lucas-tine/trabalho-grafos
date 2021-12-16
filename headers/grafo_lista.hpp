@@ -18,6 +18,7 @@ class grafo_lista: public grafo
         bool adjacentes (vertice, vertice) override;
         forward_list<vertice> operator[] (vertice);
         void dfs(vertice);
+        void bfs (vertice);
 };
 
 #endif

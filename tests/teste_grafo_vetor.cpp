@@ -6,7 +6,7 @@ using namespace std;
 int
 main ()
 {
-    grafo_vetor grafo("receita de grafo.txt");
+    grafo_vetor grafo("receita de grafo2.txt");
 
     cout << "vetor de adjacencia criado a partir de \"receita de grafo.txt\" :" << endl ;
 
@@ -20,6 +20,9 @@ main ()
 
     cout << "DFS" << endl;
     grafo.dfs(1);
+
+    cout << "BFS" << endl;
+    grafo.bfs(1);
     
     return EXIT_SUCCESS;
 }

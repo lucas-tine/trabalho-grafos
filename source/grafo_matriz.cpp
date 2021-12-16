@@ -1,5 +1,7 @@
 #include "../headers/grafo_matriz.hpp"
+#include "../headers/vetor_de_bits.hpp"
 #include <stack>
+#include <queue>
 
 grafo_matriz::grafo_matriz (string nome_do_arquivo)
 {
@@ -73,9 +75,43 @@ grafo_matriz::dfs (unsigned long vertice_){
             }
         }
     }
-    for(contador i =0; i<6; i++)
+    for(contador i =0; i<numero_de_vertices; i++)
         cout << "pai[" << i+1 << "] = " << pai[i] << endl;
-    for(contador i =0; i<6; i++)
+    for(contador i =0; i<numero_de_vertices; i++)
+        cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
+    cout << endl;
+}
+
+void
+grafo_matriz::bfs(vertice inicio){
+    inicio--;
+    vetor_de_bits visitado(numero_de_vertices);
+    vertice pai[numero_de_vertices], nivel[numero_de_vertices];
+    for(contador i = 0; i < numero_de_vertices; i++){
+        visitado[i] = false;
+        pai[i] = 0;
+        nivel[i] = 0;//Errado! Mudar
+    }
+    queue<vertice> fila;
+    visitado[inicio] = true;
+    fila.push(inicio);
+    while(!fila.empty()){
+        vertice v = fila.front();
+        fila.pop();
+        for (vertice i = 0; i < numero_de_vertices; i++){
+            if(matriz_de_adjacencia[v][i] == 1){
+                if(!visitado[i]){
+                    visitado[i] = true;
+                    fila.push(i);
+                    pai[i] = v+1;
+                    nivel[i] = nivel[v] + 1;
+                }
+            }
+        }
+    }
+    for(contador i =0; i<numero_de_vertices; i++)
+        cout << "pai[" << i+1 << "] = " << pai[i] << endl;
+    for(contador i =0; i<numero_de_vertices; i++)
         cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
     cout << endl;
 }

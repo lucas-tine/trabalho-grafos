@@ -20,6 +20,7 @@ class grafo_matriz: public grafo
         bool adjacentes (vertice, vertice ) override;
         matriz_simetrica_bits::_referencia_linha_matriz operator[] (vertice);
         void dfs (vertice);
+        void bfs (vertice);
 };
 
 #endif

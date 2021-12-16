@@ -21,5 +21,8 @@ main ()
     cout << "DFS" << endl;
     grafo.dfs(1);
 
+    cout << "BFS" << endl;
+    grafo.bfs(1);
+
     return EXIT_SUCCESS;
 }

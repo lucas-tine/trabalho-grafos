@@ -1,6 +1,8 @@
 #include "../headers/grafo_vetor.hpp"
+#include "../headers/vetor_de_bits.hpp"
 #include <fstream>
 #include <stack>
+#include <queue>
 
 grafo_vetor::grafo_vetor (string nome_do_arquivo)
 {
@@ -82,9 +84,41 @@ grafo_vetor::dfs (unsigned long vertice){
             }
         }
     }
-    for(unsigned long i =0; i<6; i++)
+    for(unsigned long i =0; i<numero_de_vertices; i++)
         cout << "pai[" << i+1 << "] = " << pai[i] << endl;
-    for(unsigned long i =0; i<6; i++)
+    for(unsigned long i =0; i<numero_de_vertices; i++)
+        cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
+    cout << endl;
+}
+
+void
+grafo_vetor::bfs(vertice inicio){
+    inicio--;
+    vetor_de_bits visitado(numero_de_vertices);
+    vertice pai[numero_de_vertices], nivel[numero_de_vertices];
+    for(contador i = 0; i < numero_de_vertices; i++){
+        visitado[i] = false;
+        pai[i] = 0;
+        nivel[i] = 0;//Errado! Mudar
+    }
+    queue<vertice> fila;
+    visitado[inicio] = true;
+    fila.push(inicio);
+    while(!fila.empty()){
+        vertice v = fila.front();
+        fila.pop();
+        for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++){
+            if(!visitado[*it]){
+                visitado[*it] = true;
+                fila.push(*it);
+                pai[*it] = v+1;
+                nivel[*it] = nivel[v] + 1;
+            }
+        }
+    }
+    for(contador i =0; i<numero_de_vertices; i++)
+        cout << "pai[" << i+1 << "] = " << pai[i] << endl;
+    for(contador i =0; i<numero_de_vertices; i++)
         cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
     cout << endl;
 }

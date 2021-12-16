@@ -19,6 +19,7 @@ class grafo_vetor: public grafo
         bool adjacentes (vertice, vertice) override;
         set<vertice> operator[] (vertice);  
         void dfs (vertice);
+        void bfs (vertice);
 };
 
 #endif
