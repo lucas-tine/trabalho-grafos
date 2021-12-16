@@ -1,4 +1,5 @@
 #include "../headers/grafo_lista.hpp"
+#include "../headers/vetor_de_bits.hpp"
 #include <fstream>
 #include <stdexcept>
 #include <stack>
@@ -63,20 +64,20 @@ grafo_lista::contido (vertice elemento, forward_list<vertice> lista)
 }
 
 void
-grafo_lista::dfs (unsigned long vertice){
-    vertice --;
-    bool visitado[numero_de_vertices];
-    unsigned long pai[numero_de_vertices], nivel[numero_de_vertices];
-    for (unsigned long i = 0; i < numero_de_vertices; i++){
+grafo_lista::dfs (vertice vertice_){
+    vertice_ --;
+    vetor_de_bits visitado(numero_de_vertices);
+    vertice pai[numero_de_vertices], nivel[numero_de_vertices];
+    for (contador i = 0; i < numero_de_vertices; i++){
         visitado[i] = false;
         pai[i] = 0;
         nivel[i] = 0; //Tá errado! Mudar
     }
-    stack<unsigned long> pilha;
-    pilha.push(vertice);
-    nivel[vertice] = 0;
+    stack<vertice> pilha;
+    pilha.push(vertice_);
+    nivel[vertice_] = 0;
     while(!pilha.empty()){
-        unsigned long v = pilha.top();
+        vertice v = pilha.top();
         pilha.pop();
         if(!visitado[v]){
             visitado[v] = true;
@@ -89,9 +90,9 @@ grafo_lista::dfs (unsigned long vertice){
             }
         }
     }
-    for(unsigned long i =0; i<6; i++)
+    for(contador i =0; i<6; i++)
         cout << "pai[" << i+1 << "] = " << pai[i] << endl;
-    for(unsigned long i =0; i<6; i++)
+    for(contador i =0; i<6; i++)
         cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
     cout << endl;
 }
