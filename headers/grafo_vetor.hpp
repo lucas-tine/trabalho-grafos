@@ -18,8 +18,10 @@ class grafo_vetor: public grafo
         grafo_vetor (ifstream& arquivo);
         bool adjacentes (vertice, vertice) override;
         set<vertice> operator[] (vertice);  
-        void dfs (vertice);
-        void bfs (vertice);
+        void dfs (vertice, vertice*, vertice*);
+        void bfs (vertice, vertice*, vertice*);
+        unsigned int calcula_distancia(vertice, vertice);
+        unsigned int calcula_diametro();
 };
 
 #endif

@@ -44,11 +44,9 @@ grafo_matriz::operator[] (vertice vertice)
 }
 
 void 
-grafo_matriz::dfs (unsigned long vertice_){
-    vertice_--;
+grafo_matriz::dfs (vertice inicio, vertice* pai, vertice* nivel){
+    inicio--;
     vetor_de_bits visitado (numero_de_vertices);
-    vertice pai[numero_de_vertices];
-    vertice nivel[numero_de_vertices];
 
     for (contador i = 0; i < numero_de_vertices; i++){
         visitado[i] = false;
@@ -57,8 +55,8 @@ grafo_matriz::dfs (unsigned long vertice_){
     }
 
     stack<vertice> pilha;
-    pilha.push(vertice_);
-    nivel[vertice_] = 0;
+    pilha.push(inicio);
+    nivel[inicio] = 0;
     while(!pilha.empty()){
         vertice v = pilha.top();
         pilha.pop();
@@ -75,18 +73,12 @@ grafo_matriz::dfs (unsigned long vertice_){
             }
         }
     }
-    for(contador i =0; i<numero_de_vertices; i++)
-        cout << "pai[" << i+1 << "] = " << pai[i] << endl;
-    for(contador i =0; i<numero_de_vertices; i++)
-        cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
-    cout << endl;
 }
 
 void
-grafo_matriz::bfs(vertice inicio){
+grafo_matriz::bfs(vertice inicio, vertice* pai, vertice* nivel){
     inicio--;
     vetor_de_bits visitado(numero_de_vertices);
-    vertice pai[numero_de_vertices], nivel[numero_de_vertices];
     for(contador i = 0; i < numero_de_vertices; i++){
         visitado[i] = false;
         pai[i] = 0;
@@ -109,9 +101,48 @@ grafo_matriz::bfs(vertice inicio){
             }
         }
     }
-    for(contador i =0; i<numero_de_vertices; i++)
-        cout << "pai[" << i+1 << "] = " << pai[i] << endl;
-    for(contador i =0; i<numero_de_vertices; i++)
-        cout << "nivel[" << i+1 << "] = " << nivel[i] << endl;
-    cout << endl;
+}
+
+unsigned int
+grafo_matriz::calcula_distancia(vertice u, vertice v){
+    u--;
+    v--;
+    vetor_de_bits visitado(numero_de_vertices);
+    vertice nivel[numero_de_vertices];
+    for(contador i = 0; i < numero_de_vertices; i++){
+        visitado[i] = false;
+        nivel[i] = 0;
+    }
+    queue<vertice> fila;
+    visitado[u] = true;
+    fila.push(u);
+    while(!fila.empty()){
+        vertice x = fila.front();
+        fila.pop();
+        for (vertice i = 0; i < numero_de_vertices; i++){
+            if(matriz_de_adjacencia[x][i] == 1){
+                if(!visitado[i]){
+                    visitado[i] = true;
+                    fila.push(i);
+                    nivel[i] = nivel[x] + 1;
+                    if(i == v)
+                        return nivel[v] - nivel[u]; 
+                }
+            }
+        }
+    }
+    return 0;//Não achou na busca = distancia não existe
+}
+
+unsigned int
+grafo_matriz::calcula_diametro(){
+    unsigned int distancia_max = 0;
+    for(vertice i = 1; i <= numero_de_vertices; i++){
+        for(vertice j = i+1; j <= numero_de_vertices; j++){
+            unsigned int distancia = this->calcula_distancia(i, j);
+            if(distancia > distancia_max)
+                distancia_max = distancia;
+        }
+    }
+    return distancia_max;
 }

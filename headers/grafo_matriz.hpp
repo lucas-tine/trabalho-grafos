@@ -19,8 +19,10 @@ class grafo_matriz: public grafo
         friend ostream& operator<< (ostream&, grafo_matriz);
         bool adjacentes (vertice, vertice ) override;
         matriz_simetrica_bits::_referencia_linha_matriz operator[] (vertice);
-        void dfs (vertice);
-        void bfs (vertice);
+        void dfs (vertice, vertice*, vertice*);
+        void bfs (vertice, vertice*, vertice*);
+        unsigned int calcula_distancia(vertice, vertice);
+        unsigned int calcula_diametro();
 };
 
 #endif
