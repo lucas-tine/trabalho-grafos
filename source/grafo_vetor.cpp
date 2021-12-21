@@ -1,6 +1,7 @@
 #include "../headers/grafo_vetor.hpp"
 #include "../headers/vetor_de_bits.hpp"
 #include <fstream>
+#include <algorithm>
 #include <stack>
 #include <queue>
 
@@ -15,7 +16,7 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
 {
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
-    this->vetor_de_adjacencia = new set<vertice> [numero_de_vertices];
+    this->vetor_de_adjacencia = new vector<vertice> [numero_de_vertices];
 
     if (this->vetor_de_adjacencia == nullptr) 
         throw bad_alloc ();
@@ -28,9 +29,9 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
         
         if (not adjacentes(vertice1, vertice2))
         {
-            vetor_de_adjacencia[vertice1].insert(vertice2);
+            vetor_de_adjacencia[vertice1].push_back(vertice2);
             if (vertice1 != vertice2)
-                vetor_de_adjacencia[vertice2].insert(vertice1);
+                vetor_de_adjacencia[vertice2].push_back(vertice1);
         }
 
         this->numero_de_arestas++;
@@ -44,14 +45,20 @@ grafo_vetor::adjacentes (vertice vertice1, vertice vertice2)
             vetor_de_adjacencia[vertice1].size() > vetor_de_adjacencia[vertice2].size();
 
     if (not grau_do_vertice1_maior )
+    {
+        auto vetor = vetor_de_adjacencia[vertice1];
         return
-        ( vetor_de_adjacencia[vertice1].find (vertice2) != vetor_de_adjacencia[vertice1].end());
+        ( find (vetor.begin(), vetor.end(), vertice2) != vetor_de_adjacencia[vertice1].end());
+    }
     else 
+    {
+        auto vetor = vetor_de_adjacencia[vertice2];
         return 
-        ( vetor_de_adjacencia[vertice2].find (vertice1) != vetor_de_adjacencia[vertice2].end());
+        ( find (vetor.begin(), vetor.end(), vertice1) != vetor_de_adjacencia[vertice2].end());
+    }
 }
 
-set<vertice> 
+vector<vertice> 
 grafo_vetor::operator[] (vertice vertice)
 {
     return this->vetor_de_adjacencia [vertice];
