@@ -145,9 +145,8 @@ grafo_vetor::calcula_diametro(){
     vertice distancia_max = 0;
     bool visitado[numero_de_vertices];
     vertice nivel[numero_de_vertices];
-    for(vertice i = 0; i <= numero_de_vertices; i++){
+    for(vertice i = 0; i < numero_de_vertices; i++){
         vertice inicio = i;
-        inicio--;
         for(contador i = 0; i < numero_de_vertices; i++){
             visitado[i] = false;
             nivel[i] = 0;
