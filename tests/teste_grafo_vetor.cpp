@@ -6,8 +6,10 @@ using namespace std;
 int
 main ()
 {
-    string nome_arquivo = "receita de grafo3.txt";
+    string nome_arquivo = "grafo_1.txt";
     grafo_vetor grafo(nome_arquivo);
+    system("pause");
+    return 0;
 
     cout << "vetor de adjacencia criado a partir de \"" << nome_arquivo << "\" :" << endl ;
 

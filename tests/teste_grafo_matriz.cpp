@@ -6,7 +6,10 @@ using namespace std;
 int
 main ()
 {
-    grafo_matriz grafo("receita de grafo3.txt");
+    string nome_arquivo = "grafo_1.txt";
+    grafo_matriz grafo(nome_arquivo);
+    system("pause");
+    return 0;
 
     cout << "matriz de adjacencia criada a partir de \"receita de grafo.txt\" :" << endl << 
     grafo << endl;
