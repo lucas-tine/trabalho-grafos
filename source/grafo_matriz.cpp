@@ -136,12 +136,32 @@ grafo_matriz::calcula_distancia(vertice u, vertice v){
 
 unsigned int
 grafo_matriz::calcula_diametro(){
-    unsigned int distancia_max = 0;
-    for(vertice i = 1; i <= numero_de_vertices; i++){
-        for(vertice j = i+1; j <= numero_de_vertices; j++){
-            unsigned int distancia = this->calcula_distancia(i, j);
-            if(distancia > distancia_max)
-                distancia_max = distancia;
+    vertice distancia_max = 0;
+    vetor_de_bits visitado(numero_de_vertices);
+    vertice nivel[numero_de_vertices];
+    for(vertice i = 0; i < numero_de_vertices; i++){
+        vertice inicio = i;
+        for(contador i = 0; i < numero_de_vertices; i++){
+            visitado[i] = false;
+            nivel[i] = 0;
+        }
+        queue<vertice> fila;
+        visitado[inicio] = true;
+        fila.push(inicio);
+        while(!fila.empty()){
+            vertice v = fila.front();
+            fila.pop();
+            if(nivel[v] > distancia_max)
+                distancia_max = nivel[v];
+            for (vertice i = 0; i < numero_de_vertices; i++){
+                if(matriz_de_adjacencia[v][i] == 1){
+                    if(!visitado[i]){
+                        visitado[i] = true;
+                        fila.push(i);
+                        nivel[i] = nivel[v] + 1;
+                    }
+                }
+            }
         }
     }
     return distancia_max;

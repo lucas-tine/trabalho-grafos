@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <stack>
 #include <queue>
+#include <set>
+#include <deque>
 
 grafo_vetor::grafo_vetor (string nome_do_arquivo)
 {
@@ -150,7 +152,7 @@ grafo_vetor::calcula_distancia(vertice u, vertice v){
 unsigned int
 grafo_vetor::calcula_diametro(){
     vertice distancia_max = 0;
-    bool visitado[numero_de_vertices];
+    vetor_de_bits visitado(numero_de_vertices);
     vertice nivel[numero_de_vertices];
     for(vertice i = 0; i < numero_de_vertices; i++){
         vertice inicio = i;
@@ -176,4 +178,62 @@ grafo_vetor::calcula_diametro(){
         }
     }
     return distancia_max;
+}
+
+void
+grafo_vetor::componentes_conexas(){
+    struct compara_tamanho {
+        bool operator() (deque<vertice> a, deque<vertice> b) const {
+            return a.size() > b.size();
+        }
+    };
+    multiset< deque<vertice> , compara_tamanho> componentes;
+    vetor_de_bits visitado(numero_de_vertices);
+    for(contador i = 0; i < numero_de_vertices; i++)
+        visitado[i] = false;
+    for(contador i = 0; i < numero_de_vertices; i++){
+        if(!visitado[i]){
+            cout << "!visitado: " << i+1 << endl;
+            queue<vertice> fila;
+            deque<vertice> vertices_conexos;
+            visitado[i] = true;
+            fila.push(i);
+            while(!fila.empty()){
+                vertice v = fila.front();
+                vertices_conexos.push_front(v);
+                fila.pop();
+                for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++){
+                    if(!visitado[*it]){
+                        visitado[*it] = true;
+                        fila.push(*it);
+                    }
+                }
+            }
+            componentes.insert(vertices_conexos);
+        }
+    }
+    for(auto it = componentes.begin(); it != componentes.end(); it++){
+        deque<vertice> f = *it;
+        for(auto it2 = f.begin(); it2 != f.end(); it2++)
+            cout << *it2+1 << ", ";
+        cout << endl;
+    }
+    /*deque<vertice> f1, f2, f3, f4;
+    for(vertice i = 0; i<=10; i++){
+        f1.push_front(i*10);
+        f2.push_front(i*30);
+        f3.push_front(i*7);
+        f4.push_front(i*20);
+    }
+    f4.push_front(1800);
+    f2.push_front(333);
+    f2.push_front(333);
+    componentes.insert(f3);
+    componentes.insert(f1);
+    componentes.insert(f2);
+    componentes.insert(f4);
+    for(auto it = componentes.begin(); it != componentes.end(); it++){
+        deque<vertice> f = *it;
+        cout << f.front() << endl;
+    }*/
 }

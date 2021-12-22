@@ -6,7 +6,7 @@ using namespace std;
 int
 main ()
 {
-    grafo_vetor grafo("receita de grafo2.txt");
+    grafo_vetor grafo("receita de grafo3.txt");
 
     cout << "vetor de adjacencia criado a partir de \"receita de grafo.txt\" :" << endl ;
 
@@ -42,5 +42,7 @@ main ()
     cout << "Distancia entre " << u << " e " << v << ": " << grafo.calcula_distancia(u, v) << endl;
 
     cout << "Diametro do grafo: " << grafo.calcula_diametro() << endl;
+
+    grafo.componentes_conexas();
     return EXIT_SUCCESS;
 }
