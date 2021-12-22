@@ -28,5 +28,7 @@ main ()
 
     cout << "Componentes conexas - Feita no txt" << endl; 
     grafo.componentes_conexas();
+
+    grafo.informacoes();
     return EXIT_SUCCESS;
 }

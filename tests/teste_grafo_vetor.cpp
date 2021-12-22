@@ -6,7 +6,7 @@ using namespace std;
 int
 main ()
 {
-    string nome_arquivo = "grafo_2.txt";
+    string nome_arquivo = "receita de grafo3.txt";
     grafo_vetor grafo(nome_arquivo);
 
     cout << "vetor de adjacencia criado a partir de \"" << nome_arquivo << "\" :" << endl ;
@@ -36,5 +36,7 @@ main ()
 
     cout << "Componentes conexas - Feita no txt " << endl; 
     grafo.componentes_conexas();
+
+    grafo.informacoes();
     return EXIT_SUCCESS;
 }

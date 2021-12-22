@@ -24,7 +24,9 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
     vertice vertice1, vertice2;
     while (arquivo >> vertice1 >> vertice2)
     {
-        matriz_de_adjacencia[vertice1-1][vertice2-1] = 1;
+        vertice1--;
+        vertice2--;
+        matriz_de_adjacencia[vertice1][vertice2] = 1;
         this->numero_de_arestas++;
 
         graus [vertice1] += 1;
@@ -252,4 +254,18 @@ grafo_matriz::componentes_conexas(){
         arquivo << *(f.end()-1)+1 << "}" << endl;
     }
     arquivo.close();
+}
+
+void
+grafo_matriz::informacoes(){
+    ofstream arquivo;
+    arquivo.open("info do grafo.txt");
+    arquivo << "Numero de vertices: " << numero_de_vertices << endl;
+    arquivo << "Numero de arestas: " << numero_de_arestas << endl;
+    arquivo << "Grau Minimo: " << this->menor_grau() << endl;
+    arquivo << "Grau Maximo: " << this->maior_grau() << endl;
+    arquivo << "Grau Medio: " << this->grau_medio() << endl;
+    arquivo << "Mediana de Grau: " << this->grau_mediano() << endl;
+    arquivo.close();
+    
 }

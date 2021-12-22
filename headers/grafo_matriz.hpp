@@ -24,6 +24,7 @@ class grafo_matriz: public grafo
         unsigned int calcula_distancia(vertice, vertice);
         unsigned int calcula_diametro();
         void componentes_conexas();
+        void informacoes();
 };
 
 #endif

@@ -261,3 +261,17 @@ grafo_vetor::componentes_conexas(){
     }
     arquivo.close();
 }
+
+void
+grafo_vetor::informacoes(){
+    ofstream arquivo;
+    arquivo.open("info do grafo.txt");
+    arquivo << "Numero de vertices: " << numero_de_vertices << endl;
+    arquivo << "Numero de arestas: " << numero_de_arestas << endl;
+    arquivo << "Grau Minimo: " << this->menor_grau() << endl;
+    arquivo << "Grau Maximo: " << this->maior_grau() << endl;
+    arquivo << "Grau Medio: " << this->grau_medio() << endl;
+    arquivo << "Mediana de Grau: " << this->grau_mediano() << endl;
+    arquivo.close();
+    
+}
