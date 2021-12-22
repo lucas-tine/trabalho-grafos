@@ -30,7 +30,7 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
         vertice1--;
         vertice2--;
         
-        if (not adjacentes(vertice1, vertice2))
+        //if (not adjacentes(vertice1, vertice2)) // confiando que o grafo está descrito corretamente
         {
             vetor_de_adjacencia[vertice1].push_back(vertice2);
             graus[vertice1] += 1;
@@ -57,13 +57,13 @@ grafo_vetor::adjacentes (vertice vertice1, vertice vertice2)
     {
         auto vetor = vetor_de_adjacencia[vertice1];
         return
-        ( find (vetor.begin(), vetor.end(), vertice2) != vetor_de_adjacencia[vertice1].end());
+        ( find (vetor.begin(), vetor.end(), vertice2) != vetor.end());
     }
     else 
     {
         auto vetor = vetor_de_adjacencia[vertice2];
         return 
-        ( find (vetor.begin(), vetor.end(), vertice1) != vetor_de_adjacencia[vertice2].end());
+        ( find (vetor.begin(), vetor.end(), vertice1) != vetor.end());
     }
 }
 

@@ -6,16 +6,17 @@ using namespace std;
 int
 main ()
 {
-    grafo_vetor grafo("receita de grafo3.txt");
+    string nome_arquivo = "receita de grafo3.txt";
+    grafo_vetor grafo(nome_arquivo);
 
-    cout << "vetor de adjacencia criado a partir de \"receita de grafo.txt\" :" << endl ;
+    cout << "vetor de adjacencia criado a partir de \"" << nome_arquivo << "\" :" << endl ;
 
     contador n_de_vertices = grafo.obter_numero_de_vertices();
 
     for (unsigned i = 0; i < n_de_vertices; i++){
         cout << "[" << i+1 << "] -> ";
-        for (auto vertice : grafo[i]){
-            cout << vertice+1 << ", ";
+        for (auto vertice_ : grafo[i]){
+            cout << vertice_+1 << ", ";
         }
         cout << endl;
     }  
