@@ -6,7 +6,7 @@ using namespace std;
 int
 main ()
 {
-    grafo_matriz grafo("receita de grafo2.txt");
+    grafo_matriz grafo("receita de grafo3.txt");
 
     cout << "matriz de adjacencia criada a partir de \"receita de grafo.txt\" :" << endl << 
     grafo << endl;
@@ -35,5 +35,8 @@ main ()
     cout << "Distancia entre " << u << " e " << v << ": " << grafo.calcula_distancia(u, v) << endl;
     
     cout << "Diametro do grafo: " << grafo.calcula_diametro() << endl;
+
+    cout << "Componentes conexas: " << endl; 
+    grafo.componentes_conexas();
     return EXIT_SUCCESS;
 }

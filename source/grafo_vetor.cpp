@@ -200,7 +200,6 @@ grafo_vetor::componentes_conexas(){
         visitado[i] = false;
     for(contador i = 0; i < numero_de_vertices; i++){
         if(!visitado[i]){
-            cout << "!visitado: " << i+1 << endl;
             queue<vertice> fila;
             deque<vertice> vertices_conexos;
             visitado[i] = true;
@@ -221,26 +220,9 @@ grafo_vetor::componentes_conexas(){
     }
     for(auto it = componentes.begin(); it != componentes.end(); it++){
         deque<vertice> f = *it;
+        cout << "{";
         for(auto it2 = f.begin(); it2 != f.end(); it2++)
             cout << *it2+1 << ", ";
-        cout << endl;
+        cout << "}" << endl;
     }
-    /*deque<vertice> f1, f2, f3, f4;
-    for(vertice i = 0; i<=10; i++){
-        f1.push_front(i*10);
-        f2.push_front(i*30);
-        f3.push_front(i*7);
-        f4.push_front(i*20);
-    }
-    f4.push_front(1800);
-    f2.push_front(333);
-    f2.push_front(333);
-    componentes.insert(f3);
-    componentes.insert(f1);
-    componentes.insert(f2);
-    componentes.insert(f4);
-    for(auto it = componentes.begin(); it != componentes.end(); it++){
-        deque<vertice> f = *it;
-        cout << f.front() << endl;
-    }*/
 }

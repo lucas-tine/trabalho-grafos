@@ -44,6 +44,7 @@ main ()
 
     cout << "Diametro do grafo: " << grafo.calcula_diametro() << endl;
 
+    cout << "Componentes conexas: " << endl; 
     grafo.componentes_conexas();
     return EXIT_SUCCESS;
 }

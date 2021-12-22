@@ -3,6 +3,8 @@
 #include <stack>
 #include <queue>
 #include <algorithm>
+#include <set>
+#include <deque>
 
 grafo_matriz::grafo_matriz (string nome_do_arquivo)
 {
@@ -173,4 +175,46 @@ grafo_matriz::calcula_diametro(){
         }
     }
     return distancia_max;
+}
+
+void
+grafo_matriz::componentes_conexas(){
+    struct compara_tamanho {
+        bool operator() (deque<vertice> a, deque<vertice> b) const {
+            return a.size() > b.size();
+        }
+    };
+    multiset< deque<vertice> , compara_tamanho> componentes;
+    vetor_de_bits visitado(numero_de_vertices);
+    for(contador i = 0; i < numero_de_vertices; i++)
+        visitado[i] = false;
+    for(contador i = 0; i < numero_de_vertices; i++){
+        if(!visitado[i]){
+            queue<vertice> fila;
+            deque<vertice> vertices_conexos;
+            visitado[i] = true;
+            fila.push(i);
+            while(!fila.empty()){
+                vertice v = fila.front();
+                vertices_conexos.push_front(v);
+                fila.pop();
+                for (vertice j = 0; j < numero_de_vertices; j++){
+                    if(matriz_de_adjacencia[v][j] == 1){
+                        if(!visitado[j]){
+                            visitado[j] = true;
+                            fila.push(j);
+                        }
+                    }
+                }
+            }
+            componentes.insert(vertices_conexos);
+        }
+    }
+    for(auto it = componentes.begin(); it != componentes.end(); it++){
+        deque<vertice> f = *it;
+        cout << "{";
+        for(auto it2 = f.begin(); it2 != f.end(); it2++)
+            cout << *it2+1 << ", ";
+        cout << "}" << endl;
+    }
 }
