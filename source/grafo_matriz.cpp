@@ -61,12 +61,12 @@ grafo_matriz::dfs (vertice inicio, vertice* pai, vertice* nivel){
     for (contador i = 0; i < numero_de_vertices; i++){
         visitado[i] = false;
         pai[i] = 0;
-        nivel[i] = 0; //Tá errado! Mudar
+        nivel[i] = 0;
     }
 
     stack<vertice> pilha;
     pilha.push(inicio);
-    nivel[inicio] = 0;
+    nivel[inicio] = 1;
     while(!pilha.empty()){
         vertice v = pilha.top();
         pilha.pop();
@@ -83,6 +83,21 @@ grafo_matriz::dfs (vertice inicio, vertice* pai, vertice* nivel){
             }
         }
     }
+    ofstream arquivo;
+    arquivo.open("dfs.txt");
+    for(contador i = 0; i<numero_de_vertices; i++){
+        if(nivel[i] == 0)
+            arquivo << "Pai[" << i+1 << "] = " << "---" << endl;
+        else
+            arquivo << "Pai[" << i+1 << "] = " << pai[i] << endl;
+    }
+    for(contador i = 0; i<numero_de_vertices; i++){
+        if(nivel[i] == 0)
+            arquivo << "Nivel[" << i+1 << "] = " << "---" << endl;
+        else
+            arquivo << "Nivel[" << i+1 << "] = " << nivel[i]-1 << endl;
+    }
+    arquivo.close();
 }
 
 void
@@ -92,10 +107,11 @@ grafo_matriz::bfs(vertice inicio, vertice* pai, vertice* nivel){
     for(contador i = 0; i < numero_de_vertices; i++){
         visitado[i] = false;
         pai[i] = 0;
-        nivel[i] = 0;//Errado! Mudar
+        nivel[i] = 0;
     }
     queue<vertice> fila;
     visitado[inicio] = true;
+    nivel[inicio] = 1;
     fila.push(inicio);
     while(!fila.empty()){
         vertice v = fila.front();
@@ -111,6 +127,21 @@ grafo_matriz::bfs(vertice inicio, vertice* pai, vertice* nivel){
             }
         }
     }
+    ofstream arquivo;
+    arquivo.open("bfs.txt");
+    for(contador i = 0; i<numero_de_vertices; i++){
+        if(nivel[i] == 0)
+            arquivo << "Pai[" << i+1 << "] = " << "---" << endl;
+        else
+            arquivo << "Pai[" << i+1 << "] = " << pai[i] << endl;
+    }
+    for(contador i = 0; i<numero_de_vertices; i++){
+        if(nivel[i] == 0)
+            arquivo << "Nivel[" << i+1 << "] = " << "---" << endl;
+        else
+            arquivo << "Nivel[" << i+1 << "] = " << nivel[i]-1 << endl;
+    }
+    arquivo.close();
 }
 
 unsigned int
@@ -210,11 +241,15 @@ grafo_matriz::componentes_conexas(){
             componentes.insert(vertices_conexos);
         }
     }
+    ofstream arquivo;
+    arquivo.open("componentes conexas.txt");
     for(auto it = componentes.begin(); it != componentes.end(); it++){
         deque<vertice> f = *it;
-        cout << "{";
-        for(auto it2 = f.begin(); it2 != f.end(); it2++)
-            cout << *it2+1 << ", ";
-        cout << "}" << endl;
+        arquivo << "{";
+        for(auto it2 = f.begin(); it2 != f.end()-1; it2++){
+            arquivo << *it2+1 << ", ";
+        }
+        arquivo << *(f.end()-1)+1 << "}" << endl;
     }
+    arquivo.close();
 }
