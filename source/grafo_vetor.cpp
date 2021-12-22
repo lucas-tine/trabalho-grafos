@@ -19,6 +19,7 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
     this->vetor_de_adjacencia = new vector<vertice> [numero_de_vertices];
+    this->graus = (contador*) calloc (numero_de_vertices, sizeof (vertice));
 
     if (this->vetor_de_adjacencia == nullptr) 
         throw bad_alloc ();
@@ -32,12 +33,18 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
         if (not adjacentes(vertice1, vertice2))
         {
             vetor_de_adjacencia[vertice1].push_back(vertice2);
+            graus[vertice1] += 1;
             if (vertice1 != vertice2)
+            {
                 vetor_de_adjacencia[vertice2].push_back(vertice1);
+                graus[vertice2] += 1;
+            }
         }
 
         this->numero_de_arestas++;
     }
+
+    sort (graus, graus + this->numero_de_vertices);
 }
 
 bool 

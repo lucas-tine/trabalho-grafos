@@ -14,7 +14,8 @@ OBJS = matriz_simetrica_bits.o	\
 TESTS = teste_vetor_de_bits.exe 	\
 		teste_matriz_simetrica.exe	\
 		teste_grafo_matriz.exe		\
-		teste_grafo_vetor.exe
+		teste_grafo_vetor.exe		\
+		teste_dados_do_grafo.exe
 
 # O(s) programa(s) oficial futuramente será definido aqui abaixo
 EXECS = 

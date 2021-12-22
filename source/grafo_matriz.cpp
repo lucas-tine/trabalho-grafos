@@ -2,6 +2,7 @@
 #include "../headers/vetor_de_bits.hpp"
 #include <stack>
 #include <queue>
+#include <algorithm>
 
 grafo_matriz::grafo_matriz (string nome_do_arquivo)
 {
@@ -14,6 +15,7 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
 {
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
+    graus = (contador*) calloc (numero_de_vertices, sizeof (vertice));
     matriz_de_adjacencia = matriz_simetrica_bits(numero_de_vertices);
     matriz_de_adjacencia.reset();
 
@@ -22,7 +24,13 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
     {
         matriz_de_adjacencia[vertice1-1][vertice2-1] = 1;
         this->numero_de_arestas++;
+
+        graus [vertice1] += 1;
+        if (vertice1 != vertice2)
+            graus[vertice2] += 1;
     }
+
+    sort (graus, graus + this->numero_de_vertices);
 }
 
 bool
