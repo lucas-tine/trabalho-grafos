@@ -6,13 +6,14 @@ using namespace std;
 int
 main ()
 {
-    string nome_arquivo = "grafo_1.txt";
+    string nome_arquivo;
+    cout << "caminho do arquivo de texto do grafo:" << endl;  
+    getline (cin, nome_arquivo);
     grafo_vetor grafo(nome_arquivo);
-    system("pause");
-    return 0;
-
-    cout << "vetor de adjacencia criado a partir de \"" << nome_arquivo << "\" :" << endl ;
-
+    cout << "vetor de adjacencia criado a partir de \"" << nome_arquivo << "\" :" << endl <<
+    "* [enter] para seguir" ;
+    cin.get();
+    
     contador n_de_vertices = grafo.obter_numero_de_vertices();
 
     for (unsigned i = 0; i < n_de_vertices; i++){

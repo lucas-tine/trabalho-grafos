@@ -40,7 +40,6 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
                 graus[vertice2] += 1;
             }
         }
-
         this->numero_de_arestas++;
     }
 
@@ -120,7 +119,8 @@ void
 grafo_vetor::bfs(vertice inicio, vertice* pai, vertice* nivel){
     inicio--;
     vetor_de_bits visitado(numero_de_vertices);
-    for(contador i = 0; i < numero_de_vertices; i++){
+    for(contador i = 0; i < numero_de_vertices; i++)
+    {
         visitado[i] = false;
         pai[i] = 0;
         nivel[i] = 0;
@@ -129,11 +129,14 @@ grafo_vetor::bfs(vertice inicio, vertice* pai, vertice* nivel){
     visitado[inicio] = true;
     nivel[inicio] = 1;
     fila.push(inicio);
-    while(!fila.empty()){
+    while(!fila.empty())
+    {
         vertice v = fila.front();
         fila.pop();
-        for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++){
-            if(!visitado[*it]){
+        for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++)
+        {
+            if(!visitado[*it])
+            {
                 visitado[*it] = true;
                 fila.push(*it);
                 pai[*it] = v+1;
@@ -141,6 +144,7 @@ grafo_vetor::bfs(vertice inicio, vertice* pai, vertice* nivel){
             }
         }
     }
+    
     ofstream arquivo;
     arquivo.open("bfs.txt");
     for(contador i = 0; i<numero_de_vertices; i++){
