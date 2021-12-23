@@ -35,4 +35,4 @@ clean-objs:
 	rm *.o 
 
 clean: 
-	rm *.o teste_*.exe $(EXECS)
+	rm *.o teste_*.exe $(EXECS) *.txt

@@ -16,6 +16,7 @@ main ()
     "* [enter] para seguir" ;
     cin.get();
     
+    cout << "obtendo numero de vertices ..." << endl;
     contador n_de_vertices = grafo.obter_numero_de_vertices();
 
     /*for (unsigned i = 0; i < n_de_vertices; i++){
@@ -26,15 +27,24 @@ main ()
         cout << endl;
     }*/
 
-    vertice pai[n_de_vertices], nivel[n_de_vertices];
+    vertice *pai, *nivel;
+    pai = new vertice [n_de_vertices];
+    nivel = new vertice [n_de_vertices];
 
+    if (pai == nullptr or nivel == nullptr) 
+    {
+        cout << "memoria insuficiente para retorno das buscas" << endl;
+        return EXIT_FAILURE;
+    }
+    
     auto comeco = chrono::steady_clock::now();
 
     //for(vertice i = 1; i <= 10; i++){//Apenas para o grafo_1 e _2, por terem menos de 1000 vertices
-        for(vertice j = 1; j < limite; j++){
+    
+    for(vertice j = 1; j < limite; j++){
             grafo.bfs(j, pai, nivel);
             cout << j << endl;
-        }
+    }
     //}
 
     auto fim = chrono::steady_clock::now();

@@ -18,7 +18,9 @@ main ()
     
     contador n_de_vertices = grafo.obter_numero_de_vertices();
 
-    vertice pai[n_de_vertices], nivel[n_de_vertices];
+    vertice* pai = new vertice [n_de_vertices];
+    vertice* nivel = new vertice [n_de_vertices];
+    
     auto limite = min ((contador) grafo.obter_numero_de_vertices(),(contador) 30);
     auto comeco = chrono::steady_clock::now();
 
