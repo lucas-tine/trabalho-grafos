@@ -5,7 +5,6 @@ using namespace std;
 
 vetor_de_bits::vetor_de_bits (contador tamanho): tamanho (tamanho)
 {
-    cout << "Vetor criado: " << tamanho << " bits." << endl;
     numero_de_bytes = tamanho/8 ;
     bool tamanho_divisivel_por_oito = ( (7 + tamanho)/8 == numero_de_bytes);
 

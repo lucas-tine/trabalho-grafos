@@ -17,6 +17,7 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
 {
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
+    assegurar_bitagem_matriz();
     graus = (contador*) calloc (numero_de_vertices, sizeof (vertice));
     matriz_de_adjacencia = matriz_simetrica_bits(numero_de_vertices);
     matriz_de_adjacencia.reset();
@@ -75,7 +76,6 @@ grafo_matriz::dfs (vertice inicio, vertice* pai, vertice* nivel){
             for (vertice i = 0; i < numero_de_vertices; i++){
                 if(matriz_de_adjacencia[v][i] == 1){
                     pilha.push(i);
-                    cout << '.' << endl;
                     if(not visitado[i]){
                         pai[i] = v+1;
                         nivel[i] = nivel[v] + 1;

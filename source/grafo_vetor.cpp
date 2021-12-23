@@ -144,7 +144,7 @@ grafo_vetor::bfs(vertice inicio, vertice* pai, vertice* nivel){
             }
         }
     }
-    
+
     ofstream arquivo;
     arquivo.open("bfs.txt");
     for(contador i = 0; i<numero_de_vertices; i++){

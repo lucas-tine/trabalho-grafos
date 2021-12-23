@@ -1,8 +1,12 @@
+#include <cmath>
+#include <stdexcept>
 #ifndef GRAFO_HPP
 #define GRAFO_HPP
 
-typedef unsigned long vertice;
-typedef unsigned long contador; // usado para contar vertices e arestas
+using namespace std;
+
+typedef unsigned long long vertice;
+typedef unsigned long long contador; // usado para contar vertices e arestas
 
 class grafo
 {
@@ -27,6 +31,16 @@ class grafo
                 soma += graus[i];
             
             return soma/numero_de_vertices ;
+        }
+        void assegurar_bitagem_matriz ()
+        {
+            bool estouro = log2(numero_de_vertices*(numero_de_vertices+1)) >= pow (2.0, sizeof(contador)*8);
+            estouro = estouro || (numero_de_vertices*(numero_de_vertices+1) < numero_de_vertices);
+            if ( estouro )
+                throw overflow_error ("tamanho do grafo eh " + to_string(numero_de_vertices) +
+                string (" mas \"unsigned long\" usa ") +
+                to_string (sizeof(contador)) +
+                string(" bits"));
         }
 };
 
