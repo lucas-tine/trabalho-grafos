@@ -37,7 +37,7 @@ vetor_de_bits::operator[] (contador indice)
     if (indice < this->tamanho) 
         return referencia_bit (indice, this->bits );
     else 
-        throw out_of_range("posicao do bit excede o tamanho do vetor de bits");
+        throw out_of_range("posicao do bit excede o tamanho do vetor de bits: " + to_string(indice));
 };
 
 void 

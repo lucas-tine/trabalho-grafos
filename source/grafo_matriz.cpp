@@ -77,6 +77,7 @@ grafo_matriz::dfs (vertice inicio, vertice* pai, vertice* nivel){
             for (vertice i = 0; i < numero_de_vertices; i++){
                 if(matriz_de_adjacencia[v][i] == 1){
                     pilha.push(i);
+                    cout << '.' << endl;
                     if(not visitado[i]){
                         pai[i] = v+1;
                         nivel[i] = nivel[v] + 1;

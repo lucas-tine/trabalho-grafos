@@ -30,10 +30,9 @@ EXECS =
 	$(LD) $(FLAGS) $< -c
 
 all:	$(OBJS) $(TESTS)
-	mv $(TESTS) tests/
 
 clean-objs:
 	rm *.o 
 
 clean: 
-	rm *.o tests/teste_*.exe $(EXECS)
+	rm *.o teste_*.exe $(EXECS)

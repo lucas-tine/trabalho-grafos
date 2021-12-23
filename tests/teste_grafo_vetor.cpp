@@ -11,6 +11,7 @@ main ()
     cout << "caminho do arquivo de texto do grafo:" << endl;  
     getline (cin, nome_arquivo);
     grafo_vetor grafo(nome_arquivo);
+    auto limite = min ((contador) grafo.obter_numero_de_vertices(),(contador) 30);
     cout << "vetor de adjacencia criado a partir de \"" << nome_arquivo << "\" :" << endl <<
     "* [enter] para seguir" ;
     cin.get();
@@ -30,8 +31,8 @@ main ()
     auto comeco = chrono::steady_clock::now();
 
     //for(vertice i = 1; i <= 10; i++){//Apenas para o grafo_1 e _2, por terem menos de 1000 vertices
-        for(vertice j = 1; j <= 1000; j++){
-            grafo.bfs(j*2, pai, nivel);
+        for(vertice j = 1; j < limite; j++){
+            grafo.bfs(j, pai, nivel);
             cout << j << endl;
         }
     //}
@@ -44,8 +45,8 @@ main ()
     comeco = chrono::steady_clock::now();
 
     //for(vertice i = 1; i <= 10; i++){//Apenas para o grafo_1 e _2, por terem menos de 1000 vertices
-        for(vertice j = 1; j <= 1000; j++){
-            grafo.dfs(j*2, pai, nivel);
+        for(vertice j = 1; j < limite; j++){
+            grafo.dfs(j, pai, nivel);
             cout << j << endl;
         }
     //}

@@ -19,15 +19,14 @@ main ()
     contador n_de_vertices = grafo.obter_numero_de_vertices();
 
     vertice pai[n_de_vertices], nivel[n_de_vertices];
-
+    auto limite = min ((contador) grafo.obter_numero_de_vertices(),(contador) 30);
     auto comeco = chrono::steady_clock::now();
 
-    //for(vertice i = 1; i <= 10; i++){//Apenas para o grafo_1 e _2, por terem menos de 1000 vertices
-        for(vertice j = 1; j <= 1000; j++){
-            grafo.bfs(j*2, pai, nivel);
-            cout << j << endl;
-        }
-    //}
+    for(vertice j = 1; j < limite; j++){
+        grafo.bfs(j, pai, nivel);
+        cout << j << endl;
+    }
+    
 
     auto fim = chrono::steady_clock::now();
     cout << "Tempo das 1000 bfs: "
@@ -37,8 +36,8 @@ main ()
     comeco = chrono::steady_clock::now();
 
     //for(vertice i = 1; i <= 10; i++){//Apenas para o grafo_1 e _2, por terem menos de 1000 vertices
-        for(vertice j = 1; j <= 1000; j++){
-            grafo.dfs(j*2, pai, nivel);
+        for(vertice j = 1; j < limite; j++){
+            grafo.dfs(j, pai, nivel);
             cout << j << endl;
         }
     //}
