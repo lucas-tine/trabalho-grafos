@@ -245,6 +245,9 @@ grafo_matriz::componentes_conexas(){
     }
     ofstream arquivo;
     arquivo.open("componentes conexas.txt");
+    arquivo << "Quantidade de componentes conexas: " << componentes.size() << endl;
+    arquivo << "Tamanho da maior componente: " << (*componentes.begin()).size() << endl;
+    arquivo << "Tamanho da menor componente: " << (*componentes.rbegin()).size() << endl;
     for(auto it = componentes.begin(); it != componentes.end(); it++){
         deque<vertice> f = *it;
         arquivo << "{";
