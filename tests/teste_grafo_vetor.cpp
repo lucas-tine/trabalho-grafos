@@ -25,8 +25,6 @@ main ()
         cout << endl;
     }*/
 
-    contador n_de_vertices = grafo.obter_numero_de_vertices();
-
     vertice pai[n_de_vertices], nivel[n_de_vertices];
 
     auto comeco = chrono::steady_clock::now();
