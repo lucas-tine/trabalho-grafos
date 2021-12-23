@@ -20,7 +20,6 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
     graus = (contador*) calloc (numero_de_vertices, sizeof (vertice));
     matriz_de_adjacencia = matriz_simetrica_bits(numero_de_vertices);
     matriz_de_adjacencia.reset();
-
     vertice vertice1, vertice2;
     while (arquivo >> vertice1 >> vertice2)
     {
@@ -28,7 +27,6 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
         vertice2--;
         matriz_de_adjacencia[vertice1][vertice2] = 1;
         this->numero_de_arestas++;
-
         graus [vertice1] += 1;
         if (vertice1 != vertice2)
             graus[vertice2] += 1;

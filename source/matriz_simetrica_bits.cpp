@@ -37,6 +37,7 @@ matriz_simetrica_bits::_referencia_linha_matriz::operator[] (contador coluna)
     }
     contador posicao_no_vetor = ( (indice_coluna)*(indice_coluna+1) )/2 ;
     posicao_no_vetor += indice_linha;
+    cout << indice_coluna << ", " << indice_linha << ", " << posicao_no_vetor << endl;
     return bits[posicao_no_vetor];
 }
 
