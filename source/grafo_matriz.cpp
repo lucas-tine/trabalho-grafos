@@ -271,3 +271,71 @@ grafo_matriz::informacoes(){
     arquivo.close();
     
 }
+
+vertice
+grafo_matriz::estima_diametro(){
+    struct compara_tamanho {
+        bool operator() (deque<vertice> a, deque<vertice> b) const {
+            return a.size() > b.size();
+        }
+    };
+    multiset< deque<vertice> , compara_tamanho> componentes;
+    vetor_de_bits visitado(numero_de_vertices);
+    for(contador i = 0; i < numero_de_vertices; i++)
+        visitado[i] = false;
+    for(contador i = 0; i < numero_de_vertices; i++){
+        if(!visitado[i]){
+            queue<vertice> fila;
+            deque<vertice> vertices_conexos;
+            visitado[i] = true;
+            fila.push(i);
+            while(!fila.empty()){
+                vertice v = fila.front();
+                fila.pop();
+                for (vertice i = 0; i < numero_de_vertices; i++){
+                    if(matriz_de_adjacencia[v][i] == 1){
+                        if(!visitado[i]){
+                            visitado[i] = true;
+                            fila.push(i);
+                        }
+                    }
+                }
+            }
+            componentes.insert(vertices_conexos);
+        }
+    }
+    deque <vertice> maior_componente = *(componentes.begin());
+    contador diametro = 0;
+    for(contador i = 0; i < 10; i++){
+        vertice distancia_max = 0;
+        vetor_de_bits visitado(numero_de_vertices);
+        vertice nivel[numero_de_vertices];
+        vertice inicio = *(maior_componente.begin() + rand() % maior_componente.size());
+        maior_componente.pop_front();
+        for(contador i = 0; i < numero_de_vertices; i++){
+            visitado[i] = false;
+            nivel[i] = 0;
+        }
+        queue<vertice> fila;
+        visitado[inicio] = true;
+        fila.push(inicio);
+        while(!fila.empty()){
+            vertice v = fila.front();
+            fila.pop();
+            if(nivel[v] > distancia_max)
+                distancia_max = nivel[v];
+            for (vertice i = 0; i < numero_de_vertices; i++){
+                if(matriz_de_adjacencia[v][i] == 1){
+                    if(!visitado[i]){
+                        visitado[i] = true;
+                        fila.push(i);
+                        nivel[i] = nivel[v] + 1;
+                    }
+                }
+            }
+        }
+        if(distancia_max > diametro)
+            diametro = distancia_max;
+    }
+    return diametro;
+}

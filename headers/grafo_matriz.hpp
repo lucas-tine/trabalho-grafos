@@ -25,6 +25,7 @@ class grafo_matriz: public grafo
         unsigned int calcula_diametro();
         void componentes_conexas();
         void informacoes();
+        vertice estima_diametro();
 };
 
 #endif
