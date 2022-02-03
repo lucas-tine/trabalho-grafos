@@ -50,10 +50,11 @@ grafo_vetor_peso::grafo_vetor_peso (ifstream& arquivo)
 
     sort (graus, graus + this->numero_de_vertices);
 }
-/*
+
 bool 
 grafo_vetor_peso::adjacentes (vertice vertice1, vertice vertice2)
 {
+    /*
     bool grau_do_vertice1_maior = 
             vetor_de_adjacencia[vertice1].size() > vetor_de_adjacencia[vertice2].size();
 
@@ -68,17 +69,19 @@ grafo_vetor_peso::adjacentes (vertice vertice1, vertice vertice2)
         auto vetor = vetor_de_adjacencia[vertice2];
         return 
         ( find (vetor.begin(), vetor.end(), vertice1) != vetor.end());
-    }
-}*/
+    }*/
+}
 
 vector<Tupla_peso> 
 grafo_vetor_peso::operator[] (vertice vertice)
 {
-    return this->vetor_de_adjacencia [vertice];
+    //return this->vetor_de_adjacencia [vertice];
 }
-/*
+
 void
-grafo_vetor_peso::dfs (vertice inicio, vertice* pai, vertice* nivel){
+grafo_vetor_peso::dfs (vertice inicio, vertice* pai, vertice* nivel)
+{
+    /*
     inicio--;
     bool visitado[numero_de_vertices];
     for (contador i = 0; i < numero_de_vertices; i++){
@@ -118,10 +121,13 @@ grafo_vetor_peso::dfs (vertice inicio, vertice* pai, vertice* nivel){
             arquivo << "Nivel[" << i+1 << "] = " << nivel[i]-1 << endl;
     }
     arquivo.close();
+    */
 }
 
 void
-grafo_vetor_peso::bfs(vertice inicio, vertice* pai, vertice* nivel){
+grafo_vetor_peso::bfs(vertice inicio, vertice* pai, vertice* nivel)
+{
+    /*
     inicio--;
     vetor_de_bits visitado(numero_de_vertices);
     for(contador i = 0; i < numero_de_vertices; i++)
@@ -165,10 +171,13 @@ grafo_vetor_peso::bfs(vertice inicio, vertice* pai, vertice* nivel){
             arquivo << "Nivel[" << i+1 << "] = " << nivel[i]-1 << endl;
     }
     arquivo.close();
+    */
 }
 
 unsigned int
-grafo_vetor_peso::calcula_distancia(vertice u, vertice v){
+grafo_vetor_peso::calcula_distancia(vertice u, vertice v)
+{
+    /*
     u--;
     v--;
     vetor_de_bits visitado(numero_de_vertices);
@@ -194,10 +203,13 @@ grafo_vetor_peso::calcula_distancia(vertice u, vertice v){
         }
     }
     return 0;//Não achou na busca = distancia não existe
+    */
 }
 
 unsigned int
-grafo_vetor_peso::calcula_diametro(){
+grafo_vetor_peso::calcula_diametro()
+{
+    /*
     vertice distancia_max = 0;
     vetor_de_bits visitado(numero_de_vertices);
     vertice nivel[numero_de_vertices];
@@ -225,10 +237,13 @@ grafo_vetor_peso::calcula_diametro(){
         }
     }
     return distancia_max;
+    */
 }
 
 void
-grafo_vetor_peso::componentes_conexas(){
+grafo_vetor_peso::componentes_conexas()
+{
+    /*
     struct compara_tamanho {
         bool operator() (deque<vertice> a, deque<vertice> b) const {
             return a.size() > b.size();
@@ -285,11 +300,13 @@ grafo_vetor_peso::informacoes(){
     arquivo << "Grau Medio: " << this->grau_medio() << endl;
     arquivo << "Mediana de Grau: " << this->grau_mediano() << endl;
     arquivo.close();
-    
+    */
 }
 
 vertice
-grafo_vetor_peso::estima_diametro(){
+grafo_vetor_peso::estima_diametro()
+{
+    /*
     struct compara_tamanho {
         bool operator() (deque<vertice> a, deque<vertice> b) const {
             return a.size() > b.size();
@@ -351,5 +368,5 @@ grafo_vetor_peso::estima_diametro(){
             diametro = distancia_max;
     }
     return diametro;
+    */
 }
-*/
