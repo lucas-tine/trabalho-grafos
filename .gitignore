@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Arquivos texto para teste
+*.txt
+
+# Configurações VSCode
+.vscode
