@@ -26,22 +26,21 @@ grafo_vetor_peso::grafo_vetor_peso (ifstream& arquivo)
 
     vertice vertice1, vertice2;
     double peso;
+    this->tem_peso_negativo = false;
     while (arquivo >> vertice1 >> vertice2 >> peso)
     {
         vertice1--;
         vertice2--;
-        Tupla_peso tupla;
-        tupla.peso = peso;
+        if(peso < 0.0)
+            this->tem_peso_negativo = true;
         
         //if (not adjacentes(vertice1, vertice2)) // confiando que o grafo está descrito corretamente
         {
-            tupla.vertice_conectado = vertice2;
-            vetor_de_adjacencia[vertice1].push_back(tupla);
+            vetor_de_adjacencia[vertice1].push_back({vertice2, peso});
             graus[vertice1] += 1;
             if (vertice1 != vertice2)
             {
-                tupla.vertice_conectado = vertice1;
-                vetor_de_adjacencia[vertice2].push_back(tupla);
+                vetor_de_adjacencia[vertice2].push_back({vertice1, peso});
                 graus[vertice2] += 1;
             }
         }
@@ -75,13 +74,13 @@ grafo_vetor_peso::adjacentes (vertice vertice1, vertice vertice2)
 vector<Tupla_peso> 
 grafo_vetor_peso::operator[] (vertice vertice)
 {
-    //return this->vetor_de_adjacencia [vertice];
+    return this->vetor_de_adjacencia [vertice];
 }
 
 void
 grafo_vetor_peso::dfs (vertice inicio, vertice* pai, vertice* nivel)
 {
-    /*
+    
     inicio--;
     bool visitado[numero_de_vertices];
     for (contador i = 0; i < numero_de_vertices; i++){
@@ -98,10 +97,11 @@ grafo_vetor_peso::dfs (vertice inicio, vertice* pai, vertice* nivel)
         if(!visitado[v]){
             visitado[v] = true;
             for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++){
-                pilha.push(*it);
-                if(!visitado[*it]){
-                    pai[*it] = v+1;
-                    nivel[*it] = nivel[v] + 1;
+                vertice u = (*it).vertice_conectado;
+                pilha.push(u);;
+                if(!visitado[u]){
+                    pai[u] = v+1;
+                    nivel[u] = nivel[v] + 1;
                 }
             }
         }
@@ -121,13 +121,12 @@ grafo_vetor_peso::dfs (vertice inicio, vertice* pai, vertice* nivel)
             arquivo << "Nivel[" << i+1 << "] = " << nivel[i]-1 << endl;
     }
     arquivo.close();
-    */
+    
 }
 
 void
 grafo_vetor_peso::bfs(vertice inicio, vertice* pai, vertice* nivel)
 {
-    /*
     inicio--;
     vetor_de_bits visitado(numero_de_vertices);
     for(contador i = 0; i < numero_de_vertices; i++)
@@ -146,12 +145,13 @@ grafo_vetor_peso::bfs(vertice inicio, vertice* pai, vertice* nivel)
         fila.pop();
         for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++)
         {
-            if(!visitado[*it])
+            vertice u = (*it).vertice_conectado;
+            if(!visitado[u])
             {
-                visitado[*it] = true;
-                fila.push(*it);
-                pai[*it] = v+1;
-                nivel[*it] = nivel[v] + 1;
+                visitado[u] = true;
+                fila.push(u);
+                pai[u] = v+1;
+                nivel[u] = nivel[v] + 1;
             }
         }
     }
@@ -171,7 +171,6 @@ grafo_vetor_peso::bfs(vertice inicio, vertice* pai, vertice* nivel)
             arquivo << "Nivel[" << i+1 << "] = " << nivel[i]-1 << endl;
     }
     arquivo.close();
-    */
 }
 
 unsigned int
@@ -193,11 +192,12 @@ grafo_vetor_peso::calcula_distancia(vertice u, vertice v)
         vertice x = fila.front();
         fila.pop();
         for (auto it = vetor_de_adjacencia[x].begin(); it != vetor_de_adjacencia[x].end(); it++){
-            if(!visitado[*it]){
-                visitado[*it] = true;
-                fila.push(*it);
-                nivel[*it] = nivel[x] + 1;
-                if(*it == v)
+            vertice y = (*it).vertice_conectado;
+            if(!visitado[y]){
+                visitado[y] = true;
+                fila.push(y);
+                nivel[y] = nivel[x] + (*it).peso;
+                if(y == v)
                     return nivel[v] - nivel[u]; 
             }
         }
@@ -228,10 +228,11 @@ grafo_vetor_peso::calcula_diametro()
             if(nivel[v] > distancia_max)
                 distancia_max = nivel[v];
             for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++){
-                if(!visitado[*it]){
-                    visitado[*it] = true;
-                    fila.push(*it);
-                    nivel[*it] = nivel[v] + 1;
+                vertice u = (*it).vertice_conectado;
+                if(!visitado[u]){
+                    visitado[u] = true;
+                    fila.push(u);
+                    nivel[u] = nivel[v] + 1;
                 }
             }
         }
@@ -243,7 +244,6 @@ grafo_vetor_peso::calcula_diametro()
 void
 grafo_vetor_peso::componentes_conexas()
 {
-    /*
     struct compara_tamanho {
         bool operator() (deque<vertice> a, deque<vertice> b) const {
             return a.size() > b.size();
@@ -264,9 +264,10 @@ grafo_vetor_peso::componentes_conexas()
                 vertices_conexos.push_front(v);
                 fila.pop();
                 for (auto it = vetor_de_adjacencia[v].begin(); it != vetor_de_adjacencia[v].end(); it++){
-                    if(!visitado[*it]){
-                        visitado[*it] = true;
-                        fila.push(*it);
+                    vertice u = (*it).vertice_conectado;
+                    if(!visitado[u]){
+                        visitado[u] = true;
+                        fila.push(u);
                     }
                 }
             }
@@ -300,7 +301,7 @@ grafo_vetor_peso::informacoes(){
     arquivo << "Grau Medio: " << this->grau_medio() << endl;
     arquivo << "Mediana de Grau: " << this->grau_mediano() << endl;
     arquivo.close();
-    */
+    
 }
 
 vertice

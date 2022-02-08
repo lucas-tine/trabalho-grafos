@@ -4,10 +4,10 @@
 #ifndef GRAFO_VETOR_PESO_HPP
 #define GRAFO_VETOR_PESO_HPP
 
-typedef struct Tupla_peso {
+struct Tupla_peso {
     vertice vertice_conectado;
     double peso;
-} Tupla_peso;
+};
 
 using namespace std;
 
@@ -15,6 +15,7 @@ class grafo_vetor_peso: public grafo
 {
     private:
         vector<Tupla_peso> *vetor_de_adjacencia;
+        bool tem_peso_negativo;
 
     public:
         grafo_vetor_peso (string nome_do_arquivo);
