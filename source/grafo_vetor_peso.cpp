@@ -6,6 +6,8 @@
 #include <queue>
 #include <set>
 #include <deque>
+#include "../headers/vetor_de_bits.hpp"
+#include "../headers/heap_de_arestas.hpp"
 
 grafo_vetor_peso::grafo_vetor_peso (string nome_do_arquivo)
 {
@@ -370,4 +372,83 @@ grafo_vetor_peso::estima_diametro()
     }
     return diametro;
     */
+}
+
+retorno_mst
+grafo_vetor_peso::MST ()
+{
+    vector<aresta_completa> vetor_do_heap (this->numero_de_vertices); 
+    heap_de_arestas arestas_disponiveis(vetor_do_heap.begin(), vetor_do_heap.end());
+
+    vetor_de_bits alcancado(this->numero_de_vertices); // vertices alcancados
+    retorno_mst mst_resultante = {
+        true, // mst valida
+        0.0,  // peso
+        vector<vertice> (this->numero_de_vertices) // pais
+    };
+    alcancado.reset();
+    for (contador i = 0; i < this->numero_de_vertices; i++)
+        mst_resultante.pais_na_arvore[i] = this->numero_de_vertices; // isso indica que o vertice nao foi alcancado
+
+    // começando no vertice 0
+    for (Tupla_peso& aresta_incidente: (*this)[0])
+    {
+        aresta_completa aresta_com_origem {
+            0,
+            aresta_incidente.vertice_conectado,
+            aresta_incidente.peso
+        };
+        arestas_disponiveis.push (aresta_com_origem);
+    }
+    alcancado[0] = true;
+    mst_resultante.pais_na_arvore[0] = 0;
+
+    // enquanto arestas não vazias
+    while (not arestas_disponiveis.empty())
+    {
+        // escolher menor arestas
+        aresta_completa aresta_preferencial = arestas_disponiveis.top();
+        arestas_disponiveis.pop();
+
+        // se extremidades da aresta nao são conhecidas
+        if ( (not alcancado[aresta_preferencial.v1]) or (not alcancado[aresta_preferencial.v2]) )
+        {
+            /*
+            cout << "* aresta escolhida: p-" << aresta_preferencial.peso <<
+            " o-" << aresta_preferencial.v1+1 << " d-" << aresta_preferencial.v2+1 << endl;
+            */
+
+            bool v1_alcancado = alcancado[aresta_preferencial.v1] ;
+            vertice recem_incluido = v1_alcancado ? 
+                aresta_preferencial.v2 : aresta_preferencial.v1;
+
+            vertice pai_do_mais_recente = v1_alcancado ? 
+                aresta_preferencial.v1 : aresta_preferencial.v2;
+
+            // incluir aresta no caminho
+            mst_resultante.pais_na_arvore[recem_incluido] = pai_do_mais_recente;
+            mst_resultante.custo_da_arvore += aresta_preferencial.peso;
+
+            // atualizar extremidades da nova aresta como conhecidas
+            alcancado[recem_incluido] = true;
+
+            // atualizar arestas disponíveis
+            for (Tupla_peso& aresta_incidente: (*this)[recem_incluido])
+            {
+                if (aresta_incidente.vertice_conectado == pai_do_mais_recente) continue;
+                aresta_completa aresta_com_origem {
+                    recem_incluido,
+                    aresta_incidente.vertice_conectado,
+                    aresta_incidente.peso
+                };
+                arestas_disponiveis.push (aresta_com_origem);
+            }
+        }
+    }
+
+    for (vertice i = 0; (i < alcancado.tamanho_em_bits()) and mst_resultante.eh_arvore; i++)
+        if (not alcancado[i])
+            mst_resultante.eh_arvore = false;
+
+    return mst_resultante;
 }

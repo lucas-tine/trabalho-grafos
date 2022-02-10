@@ -9,6 +9,12 @@ struct Tupla_peso {
     double peso;
 };
 
+struct retorno_mst { // utilizada no calculo de MSTs
+    bool eh_arvore;
+    float custo_da_arvore;
+    vector<vertice> pais_na_arvore;
+};
+
 using namespace std;
 
 class grafo_vetor_peso: public grafo 
@@ -29,6 +35,7 @@ class grafo_vetor_peso: public grafo
         void componentes_conexas();
         void informacoes();
         vertice estima_diametro();
+        retorno_mst MST (); // calcula uma MST do grafo à partir do algoritmo de prim
 };
 
 #endif
