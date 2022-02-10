@@ -379,7 +379,6 @@ grafo_vetor_peso::MST ()
 {
     vector<aresta_completa> vetor_do_heap (this->numero_de_vertices); 
     heap_de_arestas arestas_disponiveis(vetor_do_heap.begin(), vetor_do_heap.end());
-
     vetor_de_bits alcancado(this->numero_de_vertices); // vertices alcancados
     retorno_mst mst_resultante = {
         true, // mst valida
@@ -392,14 +391,13 @@ grafo_vetor_peso::MST ()
 
     // começando no vertice 0
     for (Tupla_peso& aresta_incidente: (*this)[0])
-    {
-        aresta_completa aresta_com_origem {
-            0,
-            aresta_incidente.vertice_conectado,
-            aresta_incidente.peso
-        };
-        arestas_disponiveis.push (aresta_com_origem);
-    }
+        arestas_disponiveis.push (
+            aresta_completa {
+                0,
+                aresta_incidente.vertice_conectado,
+                aresta_incidente.peso
+            }
+        );
     alcancado[0] = true;
     mst_resultante.pais_na_arvore[0] = 0;
 
@@ -413,11 +411,6 @@ grafo_vetor_peso::MST ()
         // se extremidades da aresta nao são conhecidas
         if ( (not alcancado[aresta_preferencial.v1]) or (not alcancado[aresta_preferencial.v2]) )
         {
-            /*
-            cout << "* aresta escolhida: p-" << aresta_preferencial.peso <<
-            " o-" << aresta_preferencial.v1+1 << " d-" << aresta_preferencial.v2+1 << endl;
-            */
-
             bool v1_alcancado = alcancado[aresta_preferencial.v1] ;
             vertice recem_incluido = v1_alcancado ? 
                 aresta_preferencial.v2 : aresta_preferencial.v1;
@@ -434,41 +427,41 @@ grafo_vetor_peso::MST ()
 
             // atualizar arestas disponíveis
             for (Tupla_peso& aresta_incidente: (*this)[recem_incluido])
-            {
-                if (aresta_incidente.vertice_conectado == pai_do_mais_recente) continue;
-                aresta_completa aresta_com_origem {
-                    recem_incluido,
-                    aresta_incidente.vertice_conectado,
-                    aresta_incidente.peso
-                };
-                arestas_disponiveis.push (aresta_com_origem);
-            }
+                if (aresta_incidente.vertice_conectado == pai_do_mais_recente) 
+                    continue;
+                else
+                    arestas_disponiveis.push (
+                        aresta_completa {
+                            recem_incluido,
+                            aresta_incidente.vertice_conectado,
+                            aresta_incidente.peso
+                        }
+                    );  
         }
     }
-
     for (vertice i = 0; (i < alcancado.tamanho_em_bits()) and mst_resultante.eh_arvore; i++)
         if (not alcancado[i])
             mst_resultante.eh_arvore = false;
-
     return mst_resultante;
 }
 
-void 
+retorno_mst 
 grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
 {
     ofstream arquivo (nome_do_arquivo.c_str(), ofstream::out|ofstream::trunc);
     retorno_mst mst = MST();
 
     if (not mst.eh_arvore)
-        arquivo << "[nao ha MST para este grafo]";
+        arquivo << "[nao ha MST para este grafo]" << endl;
     else 
         arquivo << "custo da MST encontrada: " << mst.custo_da_arvore << endl << endl;
         for (contador i = 0; i < this->numero_de_vertices; i++)
-            cout << "pai[" << i+1 << "] = " << (i == 0 ? "(origem) " : "") <<
+            arquivo << "pai[" << i+1 << "] = " << (i == 0 ? "(origem) " : "") <<
             ( (mst.pais_na_arvore[i] < this->numero_de_vertices) ? to_string(mst.pais_na_arvore[i] + 1) : string("x") ) 
             << endl;
 
     arquivo.close();
+    return mst;
 }
 
 pair < vector<double>, vector<vertice> >

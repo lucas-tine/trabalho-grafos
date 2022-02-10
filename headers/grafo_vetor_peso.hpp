@@ -36,7 +36,7 @@ class grafo_vetor_peso: public grafo
         void informacoes();
         vertice estima_diametro();
         retorno_mst MST (); // calcula uma MST do grafo à partir do algoritmo de prim
-        void escrever_MST (string nome_do_arquivo);
+        retorno_mst escrever_MST (string nome_do_arquivo);
         pair < vector<double>, vector<vertice> > dijkstra(vertice);
         double distancia_alvo(vertice, vertice);
         vector<double> distancia_geral(vertice);
