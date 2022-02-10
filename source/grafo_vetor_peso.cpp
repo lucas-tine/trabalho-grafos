@@ -470,3 +470,118 @@ grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
 
     arquivo.close();
 }
+
+pair < vector<double>, vector<vertice> >
+grafo_vetor_peso::dijkstra(vertice inicio){
+    inicio--;
+
+    vector<double> dist(this->numero_de_vertices, ULLONG_MAX);
+    dist[inicio] = 0;
+
+    vector<vertice> pai(this->numero_de_vertices);
+    for(contador i = 0; i<this->numero_de_vertices; i++)
+        pai[i] = i;
+
+    set< pair<double, vertice> > visitados;
+    visitados.insert({0, inicio});
+
+    while(!visitados.empty()){
+        double dist_atual = visitados.begin()->first;
+        vertice u = visitados.begin()->second;
+        
+        visitados.erase(visitados.begin());
+
+        for(auto it = vetor_de_adjacencia[u].begin(); it != vetor_de_adjacencia[u].end(); it++){
+            vertice v = it->vertice_conectado;
+
+            if(dist[v] > dist[u] + it->peso){
+                dist[v] = dist[u] + it->peso;
+                pai[v] = u;
+                visitados.insert({dist[v], v});
+            }
+        }
+    }
+    pair < vector<double>, vector<vertice> >p;
+    p.first = dist;
+    p.second = pai;
+    return p;
+}
+
+double 
+grafo_vetor_peso::distancia_alvo(vertice inicio, vertice alvo){
+    /* Retorna distância entre o vertice inicio e alvo.
+     */
+    if(tem_peso_negativo){
+        //Fazer floyd-warshal ou belmman-ford
+    }
+    else{
+        
+        return dijkstra(inicio).first[alvo-1];
+    }
+}
+
+vector<double>
+grafo_vetor_peso::distancia_geral(vertice inicio){
+    /* Retorna distância entre o vertice inicio e todos os outros.
+    O índice i do vetor de retorno é: id_vertice-1.
+    O conteúdo é a distância entre os vértices.
+     */
+    if(tem_peso_negativo){
+        //Fazer floyd-warshal ou belmman-ford
+    }
+    else{
+        return dijkstra(inicio).first;
+    }
+}
+
+vector<vertice> 
+grafo_vetor_peso::caminho_alvo(vertice inicio, vertice alvo){
+    /* Retorna o caminho entre o vertice inicio e alvo.
+     */
+    if(tem_peso_negativo){
+        //Fazer floyd-warshal ou belmman-ford
+    }
+    else{
+        vector<vertice> pai = dijkstra(inicio).second;
+        vector<vertice> caminho;
+        vertice it = pai[alvo-1];
+        while(it != inicio-1){
+            caminho.push_back(it+1);
+            it = pai[it];
+        }
+        caminho.push_back(inicio);
+        reverse(caminho.begin(), caminho.end());
+        if(alvo!=inicio)
+            caminho.push_back(alvo);
+        return caminho;
+    }
+}
+
+vector<vector<vertice>>
+grafo_vetor_peso::caminho_geral(vertice inicio){
+    /* Retorna caminho entre o vertice inicio e todos os outros.
+    O índice i do vetor de retorno é: id_vertice-1.
+    O conteúdo é o vetor caminho entre os vértices.
+     */
+    if(tem_peso_negativo){
+        //Fazer floyd-warshal ou belmman-ford
+    }
+    else{
+        vector<vertice> pai = dijkstra(inicio).second;
+        vector<vector<vertice>> todos_caminhos;
+        for(contador alvo = 1; alvo <= numero_de_vertices; alvo++){
+            vector<vertice> caminho;
+            vertice it = pai[alvo-1];
+            while(it != inicio-1){
+                caminho.push_back(it+1);
+                it = pai[it];
+            }
+            caminho.push_back(inicio);
+            reverse(caminho.begin(), caminho.end());
+            if(alvo!=inicio)
+                caminho.push_back(alvo);
+            todos_caminhos.push_back(caminho);
+        }
+        return todos_caminhos;
+    }
+}
