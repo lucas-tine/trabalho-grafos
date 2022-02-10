@@ -47,4 +47,15 @@ main ()
     cout << "Escrevendo informacoes do grafo..." << endl;
     grafo.informacoes();
 
+    vertice x;
+    cout << "Escolha o vertice de inicio do dijkstra:";;
+    cin >> x;
+    vector<vertice> v_dijkstra = grafo.dijkstra(x);
+    cout << "Resultado do Dijsktra no vertice " << x << endl;
+    int i = 0;
+    for(auto it: v_dijkstra){
+        cout << "dist[" << i+1 << "] = " << it << endl;
+        i++;
+    }
+
 }

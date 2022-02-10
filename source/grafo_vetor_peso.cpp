@@ -470,3 +470,32 @@ grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
 
     arquivo.close();
 }
+
+vector<vertice>
+grafo_vetor_peso::dijkstra(vertice inicio){
+    inicio--;
+
+    vector<vertice> dist(this->numero_de_vertices, ULLONG_MAX);
+    dist[inicio] = 0;
+
+    set< pair<double, vertice> > visitados;
+    visitados.insert({0, inicio});
+
+    while(!visitados.empty()){
+        double dist_atual = visitados.begin()->first;
+        vertice u = visitados.begin()->second;
+        
+        visitados.erase(visitados.begin());
+
+        for(auto it = vetor_de_adjacencia[u].begin(); it != vetor_de_adjacencia[u].end(); it++){
+            vertice v = it->vertice_conectado;
+
+            if(dist[v] > dist[u] + it->peso){
+                dist[v] = dist[u] + it->peso;
+                visitados.insert({dist[v], v});
+            }
+        }
+    }
+
+    return dist;
+}
