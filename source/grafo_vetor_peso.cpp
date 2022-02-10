@@ -452,3 +452,21 @@ grafo_vetor_peso::MST ()
 
     return mst_resultante;
 }
+
+void 
+grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
+{
+    ofstream arquivo (nome_do_arquivo.c_str(), ofstream::out|ofstream::trunc);
+    retorno_mst mst = MST();
+
+    if (not mst.eh_arvore)
+        arquivo << "[nao ha MST para este grafo]";
+    else 
+        arquivo << "custo da MST encontrada: " << mst.custo_da_arvore << endl << endl;
+        for (contador i = 0; i < this->numero_de_vertices; i++)
+            cout << "pai[" << i+1 << "] = " << (i == 0 ? "(origem) " : "") <<
+            ( (mst.pais_na_arvore[i] < this->numero_de_vertices) ? to_string(mst.pais_na_arvore[i] + 1) : string("x") ) 
+            << endl;
+
+    arquivo.close();
+}
