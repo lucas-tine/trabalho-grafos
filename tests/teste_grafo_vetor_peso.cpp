@@ -50,7 +50,7 @@ main ()
     vertice x;
     cout << "Escolha o vertice de inicio do dijkstra:";;
     cin >> x;
-    vector<vertice> v_dijkstra = grafo.dijkstra(x);
+    vector<double> v_dijkstra = grafo.dijkstra(x);
     cout << "Resultado do Dijsktra no vertice " << x << endl;
     int i = 0;
     for(auto it: v_dijkstra){

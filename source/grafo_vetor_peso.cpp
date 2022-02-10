@@ -471,11 +471,11 @@ grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
     arquivo.close();
 }
 
-vector<vertice>
+vector<double>
 grafo_vetor_peso::dijkstra(vertice inicio){
     inicio--;
 
-    vector<vertice> dist(this->numero_de_vertices, ULLONG_MAX);
+    vector<double> dist(this->numero_de_vertices, ULLONG_MAX);
     dist[inicio] = 0;
 
     set< pair<double, vertice> > visitados;
@@ -499,3 +499,4 @@ grafo_vetor_peso::dijkstra(vertice inicio){
 
     return dist;
 }
+
