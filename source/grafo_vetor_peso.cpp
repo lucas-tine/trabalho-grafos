@@ -8,6 +8,7 @@
 #include <deque>
 #include "../headers/vetor_de_bits.hpp"
 #include "../headers/heap_de_arestas.hpp"
+#include <limits>
 
 grafo_vetor_peso::grafo_vetor_peso (string nome_do_arquivo)
 {
@@ -577,4 +578,64 @@ grafo_vetor_peso::caminho_geral(vertice inicio){
         }
         return todos_caminhos;
     }
+}
+
+retorno_bellman_ford 
+grafo_vetor_peso::bellman_ford (vertice t)
+{
+    // A existencia de um ciclo negativo parece causar os seguintes sintomas:
+    // se t pertence ao ciclo, pai[t] não é t 
+    // se t não pertence ao ciclo negativo, a arvore geradora se torna desconexa
+
+    // OBS: descobertas empiricas e ainda questionaveis, CARECEM DE PROVAS
+
+    vector<float> menor_custo_atual (this->numero_de_vertices);
+    set<vertice> possiveis_atualizacoes; // guarda vertices do qual um vizinho foi atualizado na ultima iteracao, e portanto ainda podem se atualizar 
+    vector<vertice> pais_no_melhor_caminho (this->numero_de_vertices); // pais na arvore geradora
+    grafo_vetor_peso& grafo = *this;
+    for (vertice v = 0; v < this->numero_de_vertices; v++)
+    {
+            menor_custo_atual[v] = numeric_limits<float>::infinity();
+            possiveis_atualizacoes.insert(v); // a principio, qualquer vertice pode ser atualizado
+            pais_no_melhor_caminho[v] = this->numero_de_vertices; // isso indica que o vertice ainda nao foi alcancado
+    }
+    menor_custo_atual[t] = 0;
+    pais_no_melhor_caminho[t] = t; // se mantem sempre que nao houverem ciclos negativos
+
+    for (contador i = 0; i < this->numero_de_vertices-1 ; i++)
+    {
+        /* // DEBUG
+        for (contador v = 0; v < this->numero_de_vertices ; v++) 
+            cout << "| " << menor_custo_atual[v] << ' ';
+        cout << ' ' << '|' << endl;
+        */
+        set<vertice> proximas_atualizacoes;
+        vector<float> custo_atual_congelado = vector<float> (menor_custo_atual); // restringe o numero de arestas percorridas na iteracao
+        for (vertice v: possiveis_atualizacoes)
+        {
+            bool custo_de_v_modificado = false;
+            for (Tupla_peso& aresta_ligada: grafo[v])
+            {
+                const vertice vizinho = aresta_ligada.vertice_conectado;
+                const float peso = aresta_ligada.peso;
+                if (pais_no_melhor_caminho[vizinho] == v) continue; // evita que uma aresta negativa forme loop
+                if (custo_atual_congelado [v] > (custo_atual_congelado[vizinho] + peso) )
+                {
+                    menor_custo_atual[v] = custo_atual_congelado[vizinho] + peso;
+                    pais_no_melhor_caminho[v] = vizinho;
+                    custo_de_v_modificado = true;
+                }
+            }
+            if (custo_de_v_modificado)
+                for (Tupla_peso& aresta_ligada: grafo[v])
+                    proximas_atualizacoes.insert (aresta_ligada.vertice_conectado);
+        } 
+        if (proximas_atualizacoes.empty()) break;
+        possiveis_atualizacoes = proximas_atualizacoes;
+    }
+
+    return retorno_bellman_ford {
+        menor_custo_atual,
+        pais_no_melhor_caminho
+    };
 }

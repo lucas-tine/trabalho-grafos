@@ -15,6 +15,11 @@ struct retorno_mst { // utilizada no calculo de MSTs
     vector<vertice> pais_na_arvore;
 };
 
+struct retorno_bellman_ford {
+    vector<float> custo_do_vertice;
+    vector<vertice> pai_do_vertice_no_caminho;
+};
+
 using namespace std;
 
 class grafo_vetor_peso: public grafo 
@@ -42,6 +47,7 @@ class grafo_vetor_peso: public grafo
         vector<double> distancia_geral(vertice);
         vector<vertice> caminho_alvo(vertice, vertice);
         vector<vector<vertice>> caminho_geral(vertice);
+        retorno_bellman_ford bellman_ford (vertice t);
 };
 
 #endif

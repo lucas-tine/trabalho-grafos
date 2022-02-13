@@ -18,7 +18,8 @@ TESTS = teste_vetor_de_bits.exe 	\
 		teste_grafo_vetor.exe		\
 		teste_dados_do_grafo.exe	\
 		teste_grafo_vetor_peso.exe	\
-		teste_mst.exe
+		teste_mst.exe				\
+		teste_bellman_ford.exe
 
 # O(s) programa(s) oficial futuramente será definido aqui abaixo
 EXECS = 
