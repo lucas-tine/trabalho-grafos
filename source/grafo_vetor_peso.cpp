@@ -675,14 +675,14 @@ grafo_vetor_peso::bellman_ford (vertice t)
                     pais_no_melhor_caminho[v] = vizinho;
                     custo_de_v_modificado = true;
                     caminho_atual.clear();
-                    cout << "no novo caminho de " << v+1 << " teremos: " << v+1 << ","; 
+                    //cout << "no novo caminho de " << v+1 << " teremos: " << v+1 << ","; 
                     caminho_atual.insert(v);
                     for (vertice percorridos: caminho_do_vizinho)
                     {
                         caminho_atual.insert (percorridos);
-                        cout << percorridos+1 << ", " ;
+                        //cout << percorridos+1 << ", " ;
                     }
-                    cout << endl;
+                    //cout << endl;
                 }
             }
             if (custo_de_v_modificado)
@@ -692,7 +692,7 @@ grafo_vetor_peso::bellman_ford (vertice t)
         if (proximas_atualizacoes.empty()) break;
         possiveis_atualizacoes = proximas_atualizacoes;
 
-        cout << "proximas atualizacoes: ";
+        /*cout << "proximas atualizacoes: ";
         for (vertice v : possiveis_atualizacoes)
             cout << v+1 << ", " ;
         cout << endl;
@@ -701,6 +701,7 @@ grafo_vetor_peso::bellman_ford (vertice t)
         for (contador v = 0; v < this->numero_de_vertices ; v++) 
             cout << "| " << menor_custo_atual[v] << ' ';
         cout << ' ' << '|' << endl << endl;
+        */
     }
 
     return retorno_bellman_ford {
@@ -733,9 +734,9 @@ grafo_vetor_peso::ciclos_negativos()
 
     while (not heap_custo_minimo.empty())
     {
-        for (float c: custo)
+        /*for (float c: custo)
             cout << "( " << c << " )" ;
-        cout << endl;
+        cout << endl;*/
 
         vertice descoberto = heap_custo_minimo.top().v2;
         vertice origem = heap_custo_minimo.top().v1;
@@ -745,8 +746,8 @@ grafo_vetor_peso::ciclos_negativos()
         heap_custo_minimo.pop();
 
         if (vertice_ja_descoberto and novo_custo_menor){
-            cout << "vertice " << descoberto+1 << " pode receber um custo menor: " << novo_custo_minimo << 
-            " ao inves de " << custo[descoberto] << endl ; 
+            /*cout << "vertice " << descoberto+1 << " pode receber um custo menor: " << novo_custo_minimo << 
+            " ao inves de " << custo[descoberto] << endl ; */
             return true;
         }
         if (not novo_custo_menor) continue;
