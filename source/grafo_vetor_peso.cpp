@@ -608,7 +608,6 @@ grafo_vetor_peso::bellman_ford (vertice t)
     for (contador i = 0; i < this->numero_de_vertices-1 ; i++)
     {
         set<vertice> proximas_atualizacoes;
-        vector<float> custo_atual_congelado = vector<float> (menor_custo_atual); // restringe o numero de arestas percorridas na iteracao
         for (vertice v: possiveis_atualizacoes)
         {
             bool custo_de_v_modificado = false;
@@ -663,7 +662,7 @@ grafo_vetor_peso::bellman_ford (vertice t)
             vertice vizinho = aresta_ligada.vertice_conectado;
             float peso = aresta_ligada.peso;
             bool caminho_melhor = (menor_custo_atual[v] > menor_custo_atual[vizinho] + peso);
-            bool loop_de_aresta_negativa = (pais_no_melhor_caminho[vizinho] == v );
+            bool loop_de_aresta_negativa = (pais_no_melhor_caminho[vizinho] == v ) and (peso < 0);
 
             if (caminho_melhor and not loop_de_aresta_negativa)
             {
