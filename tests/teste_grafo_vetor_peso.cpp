@@ -1,5 +1,9 @@
 #include "../headers/grafo_vetor_peso.hpp"
 #include <iostream>
+#include <fstream>
+#include <map>
+#include <string.h>
+#include <chrono>
 
 using namespace std;
 
@@ -10,78 +14,80 @@ main ()
     cout << "caminho do arquivo de texto do grafo:" << endl;  
     getline (cin, nome_arquivo);
     grafo_vetor_peso grafo(nome_arquivo);
-    //cout << "* [enter] para seguir";
-    //cin.get();
     
-    cout << "obtendo numero de vertices ..." << endl;
+    cout << "obtendo numero de vertices: ";
     contador n_de_vertices = grafo.obter_numero_de_vertices();
     cout << n_de_vertices << endl;
 
-    cout << "vetor de adjacencia criado a partir de \"" << nome_arquivo << "\" :" << endl;
-    for (unsigned i = 0; i < n_de_vertices; i++){
-        cout << "[" << i+1 << "] -> ";
-        for(auto t : grafo[i]){
-            cout << "{" << t.vertice_conectado+1 << ", " << t.peso << "}, ";
-        }
-        cout << endl;
-    }
-
-    vertice *pai, *nivel;
-    pai = new vertice [n_de_vertices];
-    nivel = new vertice [n_de_vertices];
-
-    cout << "Fazendo DFS..." << endl;
-    grafo.dfs(1, pai, nivel);
-
-    cout << "Fazendo BFS..." << endl;
-    grafo.bfs(1, pai, nivel);
-
-    //vertice x = 1, y = 5;
-    //cout << "Fazendo Distancia entre " << x << " e " << y << ": " << grafo.calcula_distancia(x,y) << endl;
-
-    //cout << "Calculando diametro: " << grafo.calcula_diametro();
-
-    cout << "Checando componentes conexas..." << endl;
-    grafo.componentes_conexas();
-
-    cout << "Escrevendo informacoes do grafo..." << endl;
-    grafo.informacoes();
-
-    /*vertice x;
-    cout << "Escolha o vertice de inicio do dijkstra:";;
-    cin >> x;
-    vector<double> v_dijkstra = grafo.dijkstra(x);
-    cout << "Resultado do Dijsktra no vertice " << x << endl;
-    int i = 0;
-    for(auto it: v_dijkstra){
-        cout << "dist[" << i+1 << "] = " << it << endl;
-        i++;
-    }
-    */
-
-    vertice x, y;
-    cout << "Entre com dois vertices: ";
-    cin >> x >> y; 
-    cout << "Fazendo Distancia entre " << x << " e " << y << ": " << grafo.distancia_alvo(x,y) << endl;
-    cout << "Distancia entre " << x << " e todos os vertices:" << endl;
-    int i = 0;
-    for(auto it: grafo.distancia_geral(x)){
-        cout << "dist[" << i+1 << "] = " << it << endl;
-        i++;
-    }
-    cout << "Caminho entre " << x << " e " << y << ":" << endl;
-    for(auto it: grafo.caminho_alvo(x,y)){
+    //Teste de distancias
+    /*
+    cout << "Distancia entre 1 e 10: " << grafo.distancia_alvo(1, 10) << endl;
+    cout << "Caminho entre " << "1" << " e " << "10" << ":" << endl;
+    for(auto it: grafo.caminho_alvo(1,10)){
         cout << it << ", ";
     }
     cout << endl;
-    cout << "Caminho entre " << x << " e todos os vertices:" << endl;
-    i=0;
-    for(auto it: grafo.caminho_geral(x)){
-        cout << "caminho ate "<< i+1 << ": ";
-        for(auto it2: it){
-            cout << it2 << ", ";
-        }
-        cout << endl;
-        i++;
+    cout << "Distancia entre 1 e 20: " << grafo.distancia_alvo(1, 20) << endl;
+    cout << endl;
+    cout << "Distancia entre 1 e 30: " << grafo.distancia_alvo(1, 30) << endl;
+    cout << endl;
+    cout << "Distancia entre 1 e 40: " << grafo.distancia_alvo(1, 40) << endl;
+    cout << endl;
+    cout << "Distancia entre 1 e 50: " << grafo.distancia_alvo(1, 50) << endl;
+    cout << endl;
+    */
+
+    //Teste do tempo das distancias
+    auto comeco = chrono::steady_clock::now();
+    int i;
+    for(i=1; i<=100; i++){
+        int random = rand() % n_de_vertices + 1;
+        grafo.distancia_geral(random);
     }
+    auto fim = chrono::steady_clock::now();
+    cout << "Tempo das "<< i-1 << " distancias: "
+        << chrono::duration_cast<chrono::milliseconds>(fim - comeco).count()
+        << " ms" << endl;
+    
+    //Teste da MST do grafo
+    //grafo.escrever_MST("mst_"+nome_arquivo);
+
+    //Teste da rede de colaboração
+    /*
+    struct struct_colaboracao{
+        int id;
+        string nome;
+    };
+    //Dicionario para relacionar vertices e colaboradores
+    map<int, string> associacao;
+    ifstream arquivo ("rede_colaboracao_vertices.txt", ios::in);
+    arquivo.seekg(0, arquivo.beg);
+    string linha, nome, str_id;
+    int id;
+    for(int i=1; i<= 722385; i++){
+        getline(arquivo, linha);
+        str_id = linha.substr(0, linha.find(','));
+        nome = linha.substr(linha.find(',')+1);
+        id = stoi(str_id);
+        associacao.insert({id, nome});
+    }
+
+    int dijkstra_id = 2722;
+    vector<struct_colaboracao> colaboradores;
+    //colaboradores.push_back({2722 ,"Edsger W. Dijkstra"});
+    //colaboradores.push_back({11365 ,"Alan M. Turing"});
+    colaboradores.push_back({471365 ,"J. B. Kruskal"});
+    colaboradores.push_back({5709 ,"Jon M. Kleinberg"});
+    colaboradores.push_back({11386 ,"Eva Tardos"});
+    colaboradores.push_back({343930 ,"Daniel R. Figueiredo"});
+    for(auto colaborador:colaboradores){
+        cout << "Distancia de Dijkstra ate " << colaborador.nome << ": " 
+        << grafo.distancia_alvo(dijkstra_id, colaborador.id) << endl;
+        cout << "Caminho de Dijkstra ate " << colaborador.nome << ": " << endl;
+        for(auto it: grafo.caminho_alvo(dijkstra_id, colaborador.id)){
+            cout << associacao.at(it) << ", ";
+        }
+        cout << endl << endl;
+    }
+    */
 }
