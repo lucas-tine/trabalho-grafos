@@ -49,6 +49,7 @@ class grafo_vetor_peso: public grafo
         vector<vertice> caminho_alvo(vertice, vertice);
         vector<vector<vertice>> caminho_geral(vertice);
         retorno_bellman_ford bellman_ford (vertice t);
+        bool ciclos_negativos();
 };
 
 #endif
