@@ -18,6 +18,7 @@ struct retorno_mst { // utilizada no calculo de MSTs
 struct retorno_bellman_ford {
     vector<float> custo_do_vertice;
     vector<vertice> pai_do_vertice_no_caminho;
+    bool ciclos_negativos;
 };
 
 using namespace std;

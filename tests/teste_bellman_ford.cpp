@@ -22,4 +22,5 @@ main ()
         resultado.pai_do_vertice_no_caminho[v]+1 << endl;
     cout << endl;
 
+    cout << (resultado.ciclos_negativos ? "" : "NÃO ") << "temos ciclos negativos no grafo " << endl;
 }
