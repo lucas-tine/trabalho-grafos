@@ -43,9 +43,9 @@ class grafo_vetor_peso: public grafo
         vertice estima_diametro();
         retorno_mst MST (); // calcula uma MST do grafo à partir do algoritmo de prim
         retorno_mst escrever_MST (string nome_do_arquivo);
-        pair < vector<double>, vector<vertice> > dijkstra(vertice);
-        double distancia_alvo(vertice, vertice);
-        vector<double> distancia_geral(vertice);
+        pair < vector<float>, vector<vertice> > dijkstra(vertice);
+        float distancia_alvo(vertice, vertice);
+        vector<float> distancia_geral(vertice);
         vector<vertice> caminho_alvo(vertice, vertice);
         vector<vector<vertice>> caminho_geral(vertice);
         retorno_bellman_ford bellman_ford (vertice t);

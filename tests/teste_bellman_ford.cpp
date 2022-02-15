@@ -11,7 +11,7 @@ main ()
     grafo_vetor_peso grafo (nome_arquivo);
     cout << "vertice t para algoritmo bellman-ford: " << endl;
     cin >> t;
-    retorno_bellman_ford resultado = grafo.bellman_ford (--t);
+    retorno_bellman_ford resultado = grafo.bellman_ford (t);
 
     for (vertice v = 0; v < grafo.obter_numero_de_vertices(); v++)
         cout << "custo[" << v+1 << "] = " << resultado.custo_do_vertice[v] << endl;

@@ -465,22 +465,22 @@ grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
     return mst;
 }
 
-pair < vector<double>, vector<vertice> >
+pair < vector<float>, vector<vertice> >
 grafo_vetor_peso::dijkstra(vertice inicio){
     inicio--;
 
-    vector<double> dist(this->numero_de_vertices, ULLONG_MAX);
+    vector<float> dist(this->numero_de_vertices, numeric_limits<float>::infinity());
     dist[inicio] = 0;
 
     vector<vertice> pai(this->numero_de_vertices);
     for(contador i = 0; i<this->numero_de_vertices; i++)
         pai[i] = i;
 
-    set< pair<double, vertice> > visitados;
+    set< pair<float, vertice> > visitados;
     visitados.insert({0, inicio});
 
     while(!visitados.empty()){
-        double dist_atual = visitados.begin()->first;
+        float dist_atual = visitados.begin()->first;
         vertice u = visitados.begin()->second;
         
         visitados.erase(visitados.begin());
@@ -495,18 +495,25 @@ grafo_vetor_peso::dijkstra(vertice inicio){
             }
         }
     }
-    pair < vector<double>, vector<vertice> >p;
+    pair < vector<float>, vector<vertice> >p;
     p.first = dist;
     p.second = pai;
     return p;
 }
 
-double 
+float 
 grafo_vetor_peso::distancia_alvo(vertice inicio, vertice alvo){
     /* Retorna distância entre o vertice inicio e alvo.
      */
     if(tem_peso_negativo){
         //Fazer floyd-warshal ou belmman-ford
+        retorno_bellman_ford bf = bellman_ford(inicio);
+        if(!bf.ciclos_negativos){
+            return bf.custo_do_vertice[alvo-1];
+        }else{
+            cout << "Grafo com ciclo negativo: distancia indefinida." << endl;
+            return {};
+        }
     }
     else{
         
@@ -514,7 +521,7 @@ grafo_vetor_peso::distancia_alvo(vertice inicio, vertice alvo){
     }
 }
 
-vector<double>
+vector<float>
 grafo_vetor_peso::distancia_geral(vertice inicio){
     /* Retorna distância entre o vertice inicio e todos os outros.
     O índice i do vetor de retorno é: id_vertice-1.
@@ -522,6 +529,13 @@ grafo_vetor_peso::distancia_geral(vertice inicio){
      */
     if(tem_peso_negativo){
         //Fazer floyd-warshal ou belmman-ford
+        retorno_bellman_ford bf = bellman_ford(inicio);
+        if(!bf.ciclos_negativos){
+            return bf.custo_do_vertice;
+        }else{
+            cout << "Grafo com ciclo negativo: distancia indefinida." << endl;
+            return {};
+        }
     }
     else{
         return dijkstra(inicio).first;
@@ -534,6 +548,24 @@ grafo_vetor_peso::caminho_alvo(vertice inicio, vertice alvo){
      */
     if(tem_peso_negativo){
         //Fazer floyd-warshal ou belmman-ford
+        retorno_bellman_ford bf = bellman_ford(inicio);
+        if(!bf.ciclos_negativos){
+            vector<vertice> pai = bf.pai_do_vertice_no_caminho;
+            vector<vertice> caminho;
+            vertice it = pai[alvo-1];
+            while(it != inicio-1){
+                caminho.push_back(it+1);
+                it = pai[it];
+            }
+            caminho.push_back(inicio);
+            reverse(caminho.begin(), caminho.end());
+            if(alvo!=inicio)
+                caminho.push_back(alvo);
+            return caminho;
+        }else{
+            cout << "Grafo com ciclo negativo: caminho minimo indefinido." << endl;
+            return {};
+        }
     }
     else{
         vector<vertice> pai = dijkstra(inicio).second;
@@ -559,6 +591,29 @@ grafo_vetor_peso::caminho_geral(vertice inicio){
      */
     if(tem_peso_negativo){
         //Fazer floyd-warshal ou belmman-ford
+        retorno_bellman_ford bf = bellman_ford(inicio);
+        if(!bf.ciclos_negativos){
+            vector<vector<vertice>> todos_caminhos;
+            vector<vertice> pai = bf.pai_do_vertice_no_caminho;
+            for(contador alvo = 1; alvo <= numero_de_vertices; alvo++){
+                vector<vertice> caminho;
+                vertice it = pai[alvo-1];
+                while(it != inicio-1){
+                    caminho.push_back(it+1);
+                    it = pai[it];
+                }
+                caminho.push_back(inicio);
+                reverse(caminho.begin(), caminho.end());
+                if(alvo!=inicio)
+                    caminho.push_back(alvo);
+                todos_caminhos.push_back(caminho);
+            }
+            return todos_caminhos;
+            
+        }else{
+            cout << "Grafo com ciclo negativo: caminho minimo indefinido." << endl;
+            return {};
+        }
     }
     else{
         vector<vertice> pai = dijkstra(inicio).second;
