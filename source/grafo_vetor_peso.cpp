@@ -456,10 +456,11 @@ grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
         arquivo << "[nao ha MST para este grafo]" << endl;
     else 
         arquivo << "custo da MST encontrada: " << mst.custo_da_arvore << endl << endl;
-        for (contador i = 0; i < this->numero_de_vertices; i++)
-            arquivo << "pai[" << i+1 << "] = " << (i == 0 ? "(origem) " : "") <<
-            ( (mst.pais_na_arvore[i] < this->numero_de_vertices) ? to_string(mst.pais_na_arvore[i] + 1) : string("x") ) 
-            << endl;
+        
+    for (contador i = 0; i < this->numero_de_vertices; i++)
+        arquivo << "pai[" << i+1 << "] = " << (i == 0 ? "(origem) " : "") <<
+        ( (mst.pais_na_arvore[i] < this->numero_de_vertices) ? to_string(mst.pais_na_arvore[i] + 1) : string("x") ) 
+        << endl;
 
     arquivo.close();
     return mst;
@@ -480,7 +481,7 @@ grafo_vetor_peso::dijkstra(vertice inicio){
     visitados.insert({0, inicio});
 
     while(!visitados.empty()){
-        float dist_atual = visitados.begin()->first;
+        //float dist_atual = visitados.begin()->first;
         vertice u = visitados.begin()->second;
         
         visitados.erase(visitados.begin());
@@ -639,11 +640,9 @@ retorno_bellman_ford
 grafo_vetor_peso::bellman_ford (vertice t)
 {
     vector<float> menor_custo_atual (this->numero_de_vertices);
-    vector<set<vertice>> vertices_percorridos_no_caminho (this->numero_de_vertices);
     set<vertice> possiveis_atualizacoes; // guarda vertices do qual um vizinho foi atualizado na ultima iteracao, e portanto ainda podem se atualizar 
     vector<vertice> pais_no_melhor_caminho (this->numero_de_vertices); // pais na arvore geradora
     grafo_vetor_peso& grafo = *this;
-
     for (vertice v = 0; v < this->numero_de_vertices; v++)
     {
             menor_custo_atual[v] = numeric_limits<float>::infinity();
@@ -651,12 +650,17 @@ grafo_vetor_peso::bellman_ford (vertice t)
             pais_no_melhor_caminho[v] = this->numero_de_vertices; // isso indica que o vertice ainda nao foi alcancado
     }
     menor_custo_atual[t] = 0;
-    vertices_percorridos_no_caminho[t].insert(t);
     pais_no_melhor_caminho[t] = t; // se mantem sempre que nao houverem ciclos negativos
 
     for (contador i = 0; i < this->numero_de_vertices-1 ; i++)
     {
+        /* // DEBUG
+        for (contador v = 0; v < this->numero_de_vertices ; v++) 
+            cout << "| " << menor_custo_atual[v] << ' ';
+        cout << ' ' << '|' << endl;
+        */
         set<vertice> proximas_atualizacoes;
+        vector<float> custo_atual_congelado = vector<float> (menor_custo_atual); // restringe o numero de arestas percorridas na iteracao
         for (vertice v: possiveis_atualizacoes)
         {
             bool custo_de_v_modificado = false;
@@ -664,25 +668,12 @@ grafo_vetor_peso::bellman_ford (vertice t)
             {
                 const vertice vizinho = aresta_ligada.vertice_conectado;
                 const float peso = aresta_ligada.peso;
-                set<vertice> &caminho_atual = vertices_percorridos_no_caminho[v];
-                set<vertice> &caminho_do_vizinho = vertices_percorridos_no_caminho[vizinho];
-                //bool vizinho_ja_percorrido = (caminho_atual.find (vizinho) != caminho_atual.end());
-                bool v_no_caminho_de_vizinho = caminho_do_vizinho.find (v) != caminho_do_vizinho.end();
-                if (/*vizinho_ja_percorrido ||*/ v_no_caminho_de_vizinho) continue; // evita que um caminho não simples seja considerado
-                if (menor_custo_atual [v] > (menor_custo_atual[vizinho] + peso) )
+                if (pais_no_melhor_caminho[vizinho] == v) continue; // evita que uma aresta negativa forme loop
+                if (custo_atual_congelado [v] > (custo_atual_congelado[vizinho] + peso) )
                 {
-                    menor_custo_atual[v] = menor_custo_atual[vizinho] + peso;
+                    menor_custo_atual[v] = custo_atual_congelado[vizinho] + peso;
                     pais_no_melhor_caminho[v] = vizinho;
                     custo_de_v_modificado = true;
-                    caminho_atual.clear();
-                    //cout << "no novo caminho de " << v+1 << " teremos: " << v+1 << ","; 
-                    caminho_atual.insert(v);
-                    for (vertice percorridos: caminho_do_vizinho)
-                    {
-                        caminho_atual.insert (percorridos);
-                        //cout << percorridos+1 << ", " ;
-                    }
-                    //cout << endl;
                 }
             }
             if (custo_de_v_modificado)
@@ -691,17 +682,6 @@ grafo_vetor_peso::bellman_ford (vertice t)
         } 
         if (proximas_atualizacoes.empty()) break;
         possiveis_atualizacoes = proximas_atualizacoes;
-
-        /*cout << "proximas atualizacoes: ";
-        for (vertice v : possiveis_atualizacoes)
-            cout << v+1 << ", " ;
-        cout << endl;
-
-        // DEBUG
-        for (contador v = 0; v < this->numero_de_vertices ; v++) 
-            cout << "| " << menor_custo_atual[v] << ' ';
-        cout << ' ' << '|' << endl << endl;
-        */
     }
 
     return retorno_bellman_ford {
