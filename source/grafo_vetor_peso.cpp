@@ -453,16 +453,24 @@ grafo_vetor_peso::escrever_MST (string nome_do_arquivo)
     retorno_mst mst = MST();
 
     if (not mst.eh_arvore)
-        arquivo << "[nao ha MST para este grafo]" << endl;
+        cout << "[nao ha MST para este grafo]" << endl;
     else 
-        arquivo << "custo da MST encontrada: " << mst.custo_da_arvore << endl << endl;
+        cout << "custo da MST encontrada: " << mst.custo_da_arvore << endl;
         
+    /* DEBUG    
     for (contador i = 0; i < this->numero_de_vertices; i++)
         arquivo << "pai[" << i+1 << "] = " << (i == 0 ? "(origem) " : "") <<
         ( (mst.pais_na_arvore[i] < this->numero_de_vertices) ? to_string(mst.pais_na_arvore[i] + 1) : string("x") ) 
         << endl;
+    */
+
+    for (contador i = 1; i < this->numero_de_vertices; i++)
+        arquivo << i+1 << " " << 
+        ( (mst.pais_na_arvore[i] < this->numero_de_vertices) ? to_string(mst.pais_na_arvore[i]+1) : string("x") ) 
+        << endl;
 
     arquivo.close();
+    //Por que retornar?
     return mst;
 }
 
