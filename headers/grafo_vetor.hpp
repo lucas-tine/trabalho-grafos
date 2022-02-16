@@ -14,7 +14,6 @@ class grafo_vetor: public grafo
     public:
         grafo_vetor (string nome_do_arquivo);
         grafo_vetor (ifstream& arquivo);
-        bool adjacentes (vertice, vertice) override;
         vector<vertice> operator[] (vertice);  
         void dfs (vertice, vertice*, vertice*);
         void bfs (vertice, vertice*, vertice*);

@@ -32,11 +32,9 @@ class grafo_vetor_peso: public grafo
     public:
         grafo_vetor_peso (string nome_do_arquivo);
         grafo_vetor_peso (ifstream& arquivo);
-        bool adjacentes (vertice, vertice) override;
         vector<Tupla_peso> operator[] (vertice);  
         void dfs (vertice, vertice*, vertice*);
         void bfs (vertice, vertice*, vertice*);
-        unsigned int calcula_distancia(vertice, vertice);
         unsigned int calcula_diametro();
         void componentes_conexas();
         void informacoes();

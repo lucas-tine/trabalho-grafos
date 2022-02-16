@@ -36,12 +36,6 @@ grafo_matriz::grafo_matriz (ifstream& arquivo)
     sort (graus, graus + this->numero_de_vertices);
 }
 
-bool
-grafo_matriz::adjacentes (vertice vertice1, vertice vertice2)
-{
-    return (*this)[vertice1][vertice2];
-}
-
 ostream& 
 operator<< (ostream& os, grafo_matriz grafo)
 {

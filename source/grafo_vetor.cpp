@@ -29,41 +29,17 @@ grafo_vetor::grafo_vetor (ifstream& arquivo)
     {
         vertice1--;
         vertice2--;
-        
-        //if (not adjacentes(vertice1, vertice2)) // confiando que o grafo está descrito corretamente
+        vetor_de_adjacencia[vertice1].push_back(vertice2);
+        graus[vertice1] += 1;
+        if (vertice1 != vertice2)
         {
-            vetor_de_adjacencia[vertice1].push_back(vertice2);
-            graus[vertice1] += 1;
-            if (vertice1 != vertice2)
-            {
-                vetor_de_adjacencia[vertice2].push_back(vertice1);
-                graus[vertice2] += 1;
-            }
+            vetor_de_adjacencia[vertice2].push_back(vertice1);
+            graus[vertice2] += 1;
         }
         this->numero_de_arestas++;
     }
 
     sort (graus, graus + this->numero_de_vertices);
-}
-
-bool 
-grafo_vetor::adjacentes (vertice vertice1, vertice vertice2)
-{
-    bool grau_do_vertice1_maior = 
-            vetor_de_adjacencia[vertice1].size() > vetor_de_adjacencia[vertice2].size();
-
-    if (not grau_do_vertice1_maior )
-    {
-        auto vetor = vetor_de_adjacencia[vertice1];
-        return
-        ( find (vetor.begin(), vetor.end(), vertice2) != vetor.end());
-    }
-    else 
-    {
-        auto vetor = vetor_de_adjacencia[vertice2];
-        return 
-        ( find (vetor.begin(), vetor.end(), vertice1) != vetor.end());
-    }
 }
 
 vector<vertice> 

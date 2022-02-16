@@ -36,42 +36,17 @@ grafo_vetor_peso::grafo_vetor_peso (ifstream& arquivo)
         vertice2--;
         if(peso < 0.0)
             this->tem_peso_negativo = true;
-        
-        //if (not adjacentes(vertice1, vertice2)) // confiando que o grafo está descrito corretamente
+        vetor_de_adjacencia[vertice1].push_back({vertice2, peso});
+        graus[vertice1] += 1;
+        if (vertice1 != vertice2)
         {
-            vetor_de_adjacencia[vertice1].push_back({vertice2, peso});
-            graus[vertice1] += 1;
-            if (vertice1 != vertice2)
-            {
-                vetor_de_adjacencia[vertice2].push_back({vertice1, peso});
-                graus[vertice2] += 1;
-            }
+            vetor_de_adjacencia[vertice2].push_back({vertice1, peso});
+            graus[vertice2] += 1;
         }
         this->numero_de_arestas++;
     }
 
     sort (graus, graus + this->numero_de_vertices);
-}
-
-bool 
-grafo_vetor_peso::adjacentes (vertice vertice1, vertice vertice2)
-{
-    /*
-    bool grau_do_vertice1_maior = 
-            vetor_de_adjacencia[vertice1].size() > vetor_de_adjacencia[vertice2].size();
-
-    if (not grau_do_vertice1_maior )
-    {
-        auto vetor = vetor_de_adjacencia[vertice1];
-        return
-        ( find (vetor.begin(), vetor.end(), vertice2) != vetor.end());
-    }
-    else 
-    {
-        auto vetor = vetor_de_adjacencia[vertice2];
-        return 
-        ( find (vetor.begin(), vetor.end(), vertice1) != vetor.end());
-    }*/
 }
 
 vector<Tupla_peso> 
@@ -174,39 +149,6 @@ grafo_vetor_peso::bfs(vertice inicio, vertice* pai, vertice* nivel)
             arquivo << "Nivel[" << i+1 << "] = " << nivel[i]-1 << endl;
     }
     arquivo.close();
-}
-
-unsigned int
-grafo_vetor_peso::calcula_distancia(vertice u, vertice v)
-{
-    /*
-    u--;
-    v--;
-    vetor_de_bits visitado(numero_de_vertices);
-    vertice nivel[numero_de_vertices];
-    for(contador i = 0; i < numero_de_vertices; i++){
-        visitado[i] = false; 
-        nivel[i] = 0;
-    }
-    queue<vertice> fila;
-    visitado[u] = true;
-    fila.push(u);
-    while(!fila.empty()){
-        vertice x = fila.front();
-        fila.pop();
-        for (auto it = vetor_de_adjacencia[x].begin(); it != vetor_de_adjacencia[x].end(); it++){
-            vertice y = (*it).vertice_conectado;
-            if(!visitado[y]){
-                visitado[y] = true;
-                fila.push(y);
-                nivel[y] = nivel[x] + (*it).peso;
-                if(y == v)
-                    return nivel[v] - nivel[u]; 
-            }
-        }
-    }
-    return 0;//Não achou na busca = distancia não existe
-    */
 }
 
 unsigned int
