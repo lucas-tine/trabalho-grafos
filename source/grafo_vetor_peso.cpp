@@ -660,7 +660,6 @@ grafo_vetor_peso::bellman_ford (vertice t)
         cout << ' ' << '|' << endl;
         */
         set<vertice> proximas_atualizacoes;
-        vector<float> custo_atual_congelado = vector<float> (menor_custo_atual); // restringe o numero de arestas percorridas na iteracao
         for (vertice v: possiveis_atualizacoes)
         {
             bool custo_de_v_modificado = false;
@@ -669,9 +668,9 @@ grafo_vetor_peso::bellman_ford (vertice t)
                 const vertice vizinho = aresta_ligada.vertice_conectado;
                 const float peso = aresta_ligada.peso;
                 if (pais_no_melhor_caminho[vizinho] == v) continue; // evita que uma aresta negativa forme loop
-                if (custo_atual_congelado [v] > (custo_atual_congelado[vizinho] + peso) )
+                if (menor_custo_atual [v] > (menor_custo_atual[vizinho] + peso) )
                 {
-                    menor_custo_atual[v] = custo_atual_congelado[vizinho] + peso;
+                    menor_custo_atual[v] = menor_custo_atual[vizinho] + peso;
                     pais_no_melhor_caminho[v] = vizinho;
                     custo_de_v_modificado = true;
                 }
@@ -701,23 +700,22 @@ grafo_vetor_peso::ciclos_negativos()
 
     for (vertice v = 0; v < this->numero_de_vertices; v++)
         custo[v] = numeric_limits<float>::infinity();
-    custo[0] = 0;
 
-    for (Tupla_peso& aresta: grafo[0])
-        heap_custo_minimo.push (
-            aresta_completa {
-                0,
-                aresta.vertice_conectado,
-                aresta.peso + custo[0]                
-            }
-        );
+    auto iniciar_exploracao = [&] (vertice t) {
+        custo[t] = 0;
+        for (Tupla_peso& aresta: grafo[t])
+            heap_custo_minimo.push (
+                aresta_completa {
+                    t,
+                    aresta.vertice_conectado,
+                    aresta.peso + custo[t]                
+                }
+            );
+    };
+    iniciar_exploracao(0);
 
     while (not heap_custo_minimo.empty())
     {
-        /*for (float c: custo)
-            cout << "( " << c << " )" ;
-        cout << endl;*/
-
         vertice descoberto = heap_custo_minimo.top().v2;
         vertice origem = heap_custo_minimo.top().v1;
         float novo_custo_minimo = heap_custo_minimo.top().peso;
@@ -725,11 +723,17 @@ grafo_vetor_peso::ciclos_negativos()
         bool novo_custo_menor = novo_custo_minimo < custo[descoberto];
         heap_custo_minimo.pop();
 
-        if (vertice_ja_descoberto and novo_custo_menor){
-            /*cout << "vertice " << descoberto+1 << " pode receber um custo menor: " << novo_custo_minimo << 
-            " ao inves de " << custo[descoberto] << endl ; */
+        if (heap_custo_minimo.empty())
+            for (vertice v = 0; v < this->numero_de_vertices; v++)
+                if (custo[v] == numeric_limits<float>::infinity()) 
+                { 
+                    iniciar_exploracao(v);
+                    break;
+                }
+
+        if (vertice_ja_descoberto and novo_custo_menor)
             return true;
-        }
+        
         if (not novo_custo_menor) continue;
 
         custo[descoberto] = novo_custo_minimo;
