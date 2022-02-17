@@ -28,10 +28,11 @@ class grafo_vetor_peso: public grafo
     private:
         vector<Tupla_peso> *vetor_de_adjacencia;
         bool tem_peso_negativo;
+        bool direcionado;
 
     public:
-        grafo_vetor_peso (string nome_do_arquivo);
-        grafo_vetor_peso (ifstream& arquivo);
+        grafo_vetor_peso (string nome_do_arquivo, bool);
+        grafo_vetor_peso (ifstream& arquivo, bool);
         vector<Tupla_peso> operator[] (vertice);  
         void dfs (vertice, vertice*, vertice*);
         void bfs (vertice, vertice*, vertice*);

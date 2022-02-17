@@ -10,17 +10,18 @@
 #include "../headers/heap_de_arestas.hpp"
 #include <limits>
 
-grafo_vetor_peso::grafo_vetor_peso (string nome_do_arquivo)
+grafo_vetor_peso::grafo_vetor_peso (string nome_do_arquivo, bool direcionado)
 {
     ifstream arquivo (nome_do_arquivo, ios::in);
-    *this = grafo_vetor_peso(arquivo);
+    *this = grafo_vetor_peso(arquivo, direcionado);
     arquivo.close();
 }
 
-grafo_vetor_peso::grafo_vetor_peso (ifstream& arquivo)
+grafo_vetor_peso::grafo_vetor_peso (ifstream& arquivo, bool direcionado)
 {
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
+    this->direcionado = direcionado;
     this->vetor_de_adjacencia = new vector<Tupla_peso> [numero_de_vertices];
     this->graus = (contador*) calloc (numero_de_vertices, sizeof (vertice));
 
@@ -38,7 +39,7 @@ grafo_vetor_peso::grafo_vetor_peso (ifstream& arquivo)
             this->tem_peso_negativo = true;
         vetor_de_adjacencia[vertice1].push_back({vertice2, peso});
         graus[vertice1] += 1;
-        if (vertice1 != vertice2)
+        if (not this->direcionado)
         {
             vetor_de_adjacencia[vertice2].push_back({vertice1, peso});
             graus[vertice2] += 1;
@@ -46,6 +47,8 @@ grafo_vetor_peso::grafo_vetor_peso (ifstream& arquivo)
         this->numero_de_arestas++;
     }
 
+    if(this->tem_peso_negativo and not this->direcionado)
+        cout << "Esta biblioteca nao suporta grafos nao direcionados com pesos negativos." << endl;
     sort (graus, graus + this->numero_de_vertices);
 }
 
@@ -589,26 +592,28 @@ grafo_vetor_peso::caminho_geral(vertice inicio){
 retorno_bellman_ford 
 grafo_vetor_peso::bellman_ford (vertice t)
 {
-    vector<float> menor_custo_atual (this->numero_de_vertices);
+    vector<float> dist (this->numero_de_vertices);
     set<vertice> possiveis_atualizacoes; // guarda vertices do qual um vizinho foi atualizado na ultima iteracao, e portanto ainda podem se atualizar 
-    vector<vertice> pais_no_melhor_caminho (this->numero_de_vertices); // pais na arvore geradora
+    vector<vertice> pai (this->numero_de_vertices); // pais na arvore geradora
     grafo_vetor_peso& grafo = *this;
     for (vertice v = 0; v < this->numero_de_vertices; v++)
     {
-            menor_custo_atual[v] = numeric_limits<float>::infinity();
+            dist[v] = numeric_limits<float>::infinity();
             possiveis_atualizacoes.insert(v); // a principio, qualquer vertice pode ser atualizado
-            pais_no_melhor_caminho[v] = this->numero_de_vertices; // isso indica que o vertice ainda nao foi alcancado
+            pai[v] = this->numero_de_vertices; // isso indica que o vertice ainda nao foi alcancado
     }
-    menor_custo_atual[t] = 0;
-    pais_no_melhor_caminho[t] = t; // se mantem sempre que nao houverem ciclos negativos
+    dist[t] = 0;
+    pai[t] = t; // se mantem sempre que nao houverem ciclos negativos
 
     for (contador i = 0; i < this->numero_de_vertices-1 ; i++)
     {
-        /* // DEBUG
+        // DEBUG
+        /*
         for (contador v = 0; v < this->numero_de_vertices ; v++) 
-            cout << "| " << menor_custo_atual[v] << ' ';
+            cout << "| " << dist[v] << ' ';
         cout << ' ' << '|' << endl;
         */
+        
         set<vertice> proximas_atualizacoes;
         for (vertice v: possiveis_atualizacoes)
         {
@@ -617,86 +622,37 @@ grafo_vetor_peso::bellman_ford (vertice t)
             {
                 const vertice vizinho = aresta_ligada.vertice_conectado;
                 const float peso = aresta_ligada.peso;
-                if (pais_no_melhor_caminho[vizinho] == v) continue; // evita que uma aresta negativa forme loop
-                if (menor_custo_atual [v] > (menor_custo_atual[vizinho] + peso) )
+                if (dist[vizinho] > (dist[v] + peso) )
                 {
-                    menor_custo_atual[v] = menor_custo_atual[vizinho] + peso;
-                    pais_no_melhor_caminho[v] = vizinho;
+                    dist[vizinho] = dist[v] + peso;
+                    pai[vizinho] = v;
                     custo_de_v_modificado = true;
                 }
             }
             if (custo_de_v_modificado)
                 for (Tupla_peso& aresta_ligada: grafo[v])
                     proximas_atualizacoes.insert (aresta_ligada.vertice_conectado);
-        } 
+        }
         if (proximas_atualizacoes.empty()) break;
         possiveis_atualizacoes = proximas_atualizacoes;
     }
-
-    return retorno_bellman_ford {
-        menor_custo_atual,
-        pais_no_melhor_caminho,
-        this->ciclos_negativos()
-    };
-}
-
-bool 
-grafo_vetor_peso::ciclos_negativos()
-{
-    grafo_vetor_peso& grafo = *this;
-    vector<float> custo (this->numero_de_vertices);
-    vector<aresta_completa> vetor_de_heap(this->numero_de_arestas);
-    heap_de_arestas  heap_custo_minimo (vetor_de_heap.begin(), vetor_de_heap.end());
-
-    for (vertice v = 0; v < this->numero_de_vertices; v++)
-        custo[v] = numeric_limits<float>::infinity();
-
-    auto iniciar_exploracao = [&] (vertice t) {
-        custo[t] = 0;
-        for (Tupla_peso& aresta: grafo[t])
-            heap_custo_minimo.push (
-                aresta_completa {
-                    t,
-                    aresta.vertice_conectado,
-                    aresta.peso + custo[t]                
-                }
-            );
-    };
-    iniciar_exploracao(0);
-
-    while (not heap_custo_minimo.empty())
-    {
-        vertice descoberto = heap_custo_minimo.top().v2;
-        vertice origem = heap_custo_minimo.top().v1;
-        float novo_custo_minimo = heap_custo_minimo.top().peso;
-        bool vertice_ja_descoberto = custo[descoberto] != numeric_limits<float>::infinity();
-        bool novo_custo_menor = novo_custo_minimo < custo[descoberto];
-        heap_custo_minimo.pop();
-
-        if (heap_custo_minimo.empty())
-            for (vertice v = 0; v < this->numero_de_vertices; v++)
-                if (custo[v] == numeric_limits<float>::infinity()) 
-                { 
-                    iniciar_exploracao(v);
-                    break;
-                }
-
-        if (vertice_ja_descoberto and novo_custo_menor)
-            return true;
-        
-        if (not novo_custo_menor) continue;
-
-        custo[descoberto] = novo_custo_minimo;
-        for (Tupla_peso& aresta: grafo[descoberto])
-            if (aresta.vertice_conectado != origem)
-                heap_custo_minimo.push (
-                    aresta_completa {
-                        descoberto,
-                        aresta.vertice_conectado,
-                        aresta.peso + custo[descoberto]                
-                    }
-                );
+    //Loop para detecção de ciclos negativos
+    bool ciclos_negativos = false;
+    for (contador v=0; v<this->numero_de_vertices; v++){
+        for (Tupla_peso& aresta_ligada: grafo[v])
+        {
+            const vertice vizinho = aresta_ligada.vertice_conectado;
+            const float peso = aresta_ligada.peso;
+            if (dist [vizinho] > (dist[v] + peso) )
+            {
+                ciclos_negativos = true;
+            }
+        }
     }
 
-    return false;
+    return retorno_bellman_ford {
+        dist,
+        pai,
+        ciclos_negativos
+    };
 }

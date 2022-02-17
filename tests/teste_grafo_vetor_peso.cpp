@@ -13,7 +13,7 @@ main ()
     string nome_arquivo;
     cout << "caminho do arquivo de texto do grafo:" << endl;  
     getline (cin, nome_arquivo);
-    grafo_vetor_peso grafo(nome_arquivo);
+    grafo_vetor_peso grafo(nome_arquivo, false);
     
     cout << "obtendo numero de vertices: ";
     contador n_de_vertices = grafo.obter_numero_de_vertices();
@@ -38,6 +38,7 @@ main ()
     */
 
     //Teste do tempo das distancias
+    /*
     auto comeco = chrono::steady_clock::now();
     int i;
     for(i=1; i<=100; i++){
@@ -48,9 +49,10 @@ main ()
     cout << "Tempo das "<< i-1 << " distancias: "
         << chrono::duration_cast<chrono::milliseconds>(fim - comeco).count()
         << " ms" << endl;
-    
+    */
+
     //Teste da MST do grafo
-    //grafo.escrever_MST("mst_"+nome_arquivo);
+    grafo.escrever_MST("mst_"+nome_arquivo);
 
     //Teste da rede de colaboração
     /*
