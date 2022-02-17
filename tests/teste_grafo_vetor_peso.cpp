@@ -13,7 +13,8 @@ main ()
     string nome_arquivo;
     cout << "caminho do arquivo de texto do grafo:" << endl;  
     getline (cin, nome_arquivo);
-    grafo_vetor_peso grafo(nome_arquivo, false);
+    bool direcionado = true;
+    grafo_vetor_peso grafo(nome_arquivo, direcionado);
     
     cout << "obtendo numero de vertices: ";
     contador n_de_vertices = grafo.obter_numero_de_vertices();
@@ -36,6 +37,7 @@ main ()
     cout << "Distancia entre 1 e 50: " << grafo.distancia_alvo(1, 50) << endl;
     cout << endl;
     */
+    
 
     //Teste do tempo das distancias
     /*

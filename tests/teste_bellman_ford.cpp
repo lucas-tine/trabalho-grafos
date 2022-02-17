@@ -6,7 +6,7 @@ using namespace std;
 int 
 main ()
 { 
-    const string nome_arquivo = "receitapeso2.txt";
+    const string nome_arquivo = "gn1.txt";
     vertice t;
     bool direcao = true;
     grafo_vetor_peso grafo(nome_arquivo, direcao);

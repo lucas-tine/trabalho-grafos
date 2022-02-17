@@ -1,6 +1,7 @@
+#include "grafo.hpp"
 #include <vector>
 #include <iostream>
-#include "grafo.hpp"
+
 #ifndef GRAFO_VETOR_HPP
 #define GRAFO_VETOR_HPP
 
@@ -17,7 +18,7 @@ class grafo_vetor: public grafo
         vector<vertice> operator[] (vertice);  
         void dfs (vertice, vertice*, vertice*);
         void bfs (vertice, vertice*, vertice*);
-        unsigned int calcula_distancia(vertice, vertice);
+        unsigned int distancia_alvo(vertice, vertice);
         unsigned int calcula_diametro();
         void componentes_conexas();
         void informacoes();

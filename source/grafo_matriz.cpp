@@ -6,15 +6,17 @@
 #include <set>
 #include <deque>
 
-grafo_matriz::grafo_matriz (string nome_do_arquivo)
-{
+grafo_matriz::grafo_matriz (string nome_do_arquivo){
+    //Construtor do grafo. Recebe o nome do arquivo como parâmetro
+    
     ifstream arquivo (nome_do_arquivo, ios::in);
     *this = grafo_matriz (arquivo);
     arquivo.close();
 }
 
-grafo_matriz::grafo_matriz (ifstream& arquivo)
-{
+grafo_matriz::grafo_matriz (ifstream& arquivo){
+    //Construtor do grafo. Recebe um ponteiro para o arquivo como parâmetro
+
     arquivo.seekg(0, arquivo.beg);
     arquivo >> this->numero_de_vertices;
     assegurar_bitagem_matriz();
@@ -50,6 +52,12 @@ grafo_matriz::operator[] (vertice vertice)
 
 void 
 grafo_matriz::dfs (vertice inicio, vertice* pai, vertice* nivel){
+    /* Executa uma DFS no grafo, partindo do vértice inicio. Escreve o resultado no arquivo dfs.txt
+    Recebe como parâmetro dois ponteiros para vetores
+    Pai[u] = v --> Vértice v descobriu o vértice u
+    Nivel[u] --> Nível do vértice u na árvore
+    */
+
     inicio--;
     vetor_de_bits visitado (numero_de_vertices);
 
@@ -97,6 +105,12 @@ grafo_matriz::dfs (vertice inicio, vertice* pai, vertice* nivel){
 
 void
 grafo_matriz::bfs(vertice inicio, vertice* pai, vertice* nivel){
+    /* Executa uma BFS no grafo, partindo do vértice inicio. Escreve o resultado no arquivo bfs.txt
+    Recebe como parâmetro dois ponteiros para vetores
+    Pai[u] = v --> Vértice v descobriu o vértice u
+    Nivel[u] --> Nível do vértice u na árvore
+    */
+
     inicio--;
     vetor_de_bits visitado(numero_de_vertices);
     for(contador i = 0; i < numero_de_vertices; i++){
@@ -140,7 +154,9 @@ grafo_matriz::bfs(vertice inicio, vertice* pai, vertice* nivel){
 }
 
 unsigned int
-grafo_matriz::calcula_distancia(vertice u, vertice v){
+grafo_matriz::distancia_alvo(vertice u, vertice v){
+    //Calcula e retorna a distância entre os vértices u e v
+
     u--;
     v--;
     vetor_de_bits visitado(numero_de_vertices);
@@ -172,6 +188,8 @@ grafo_matriz::calcula_distancia(vertice u, vertice v){
 
 unsigned int
 grafo_matriz::calcula_diametro(){
+    //Calcula e retorna o diâmetro do grafo
+
     vertice distancia_max = 0;
     vetor_de_bits visitado(numero_de_vertices);
     vertice nivel[numero_de_vertices];
@@ -205,6 +223,10 @@ grafo_matriz::calcula_diametro(){
 
 void
 grafo_matriz::componentes_conexas(){
+    /* Calcula as componentes conexas do grafo
+    O resultado é escrito no arquivo componentes_conexas.txt
+    */
+
     struct compara_tamanho {
         bool operator() (deque<vertice> a, deque<vertice> b) const {
             return a.size() > b.size();
@@ -237,7 +259,7 @@ grafo_matriz::componentes_conexas(){
         }
     }
     ofstream arquivo;
-    arquivo.open("componentes conexas.txt");
+    arquivo.open("componentes_conexas.txt");
     arquivo << "Quantidade de componentes conexas: " << componentes.size() << endl;
     arquivo << "Tamanho da maior componente: " << (*componentes.begin()).size() << endl;
     arquivo << "Tamanho da menor componente: " << (*componentes.rbegin()).size() << endl;
@@ -254,8 +276,10 @@ grafo_matriz::componentes_conexas(){
 
 void
 grafo_matriz::informacoes(){
+    //Escreve informações gerais do grafo no arquivo info_do_grafo.txt
+
     ofstream arquivo;
-    arquivo.open("info do grafo.txt");
+    arquivo.open("info_do_grafo.txt");
     arquivo << "Numero de vertices: " << numero_de_vertices << endl;
     arquivo << "Numero de arestas: " << numero_de_arestas << endl;
     arquivo << "Grau Minimo: " << this->menor_grau() << endl;
@@ -268,6 +292,8 @@ grafo_matriz::informacoes(){
 
 vertice
 grafo_matriz::estima_diametro(){
+    //Calcula e retorna uma estimativa do diâmetro do grafo
+
     struct compara_tamanho {
         bool operator() (deque<vertice> a, deque<vertice> b) const {
             return a.size() > b.size();

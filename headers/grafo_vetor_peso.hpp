@@ -9,14 +9,19 @@ struct Tupla_peso {
     double peso;
 };
 
-struct retorno_mst { // utilizada no calculo de MSTs
+struct retorno_mst {
     bool eh_arvore;
-    float custo_da_arvore;
+    float custo_da_arvore;//Custo total da árvore
     vector<vertice> pais_na_arvore;
 };
 
+struct retorno_dijkstra {
+    vector<float> custo_do_vertice;//Distancia até o vértice
+    vector<vertice> pai_do_vertice_no_caminho;
+};
+
 struct retorno_bellman_ford {
-    vector<float> custo_do_vertice;
+    vector<float> custo_do_vertice;//Distancia até o vértice
     vector<vertice> pai_do_vertice_no_caminho;
     bool ciclos_negativos;
 };
@@ -36,19 +41,16 @@ class grafo_vetor_peso: public grafo
         vector<Tupla_peso> operator[] (vertice);  
         void dfs (vertice, vertice*, vertice*);
         void bfs (vertice, vertice*, vertice*);
-        unsigned int calcula_diametro();
         void componentes_conexas();
         void informacoes();
-        vertice estima_diametro();
-        retorno_mst MST (); // calcula uma MST do grafo à partir do algoritmo de prim
-        retorno_mst escrever_MST (string nome_do_arquivo);
-        pair < vector<float>, vector<vertice> > dijkstra(vertice);
+        retorno_mst MST ();
+        void escrever_MST (string nome_do_arquivo);
+        retorno_dijkstra dijkstra(vertice);
+        retorno_bellman_ford bellman_ford (vertice t);
         float distancia_alvo(vertice, vertice);
         vector<float> distancia_geral(vertice);
         vector<vertice> caminho_alvo(vertice, vertice);
         vector<vector<vertice>> caminho_geral(vertice);
-        retorno_bellman_ford bellman_ford (vertice t);
-        bool ciclos_negativos();
 };
 
 #endif

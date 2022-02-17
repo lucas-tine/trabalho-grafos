@@ -82,9 +82,9 @@ main ()
         cout << "Pai[30] = " << pai[29] << endl;
     }
 
-    cout << "Distancia entre (10, 20): " << grafo.calcula_distancia(10, 20) << endl;
-    cout << "Distancia entre (10, 30): " << grafo.calcula_distancia(10, 30) << endl;
-    cout << "Distancia entre (20, 30): " << grafo.calcula_distancia(20, 30) << endl;
+    cout << "Distancia entre (10, 20): " << grafo.distancia_alvo(10, 20) << endl;
+    cout << "Distancia entre (10, 30): " << grafo.distancia_alvo(10, 30) << endl;
+    cout << "Distancia entre (20, 30): " << grafo.distancia_alvo(20, 30) << endl;
 
     grafo.componentes_conexas();
 

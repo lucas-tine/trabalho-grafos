@@ -20,7 +20,7 @@ class grafo_matriz: public grafo
         matriz_simetrica_bits::_referencia_linha_matriz operator[] (vertice);
         void dfs (vertice, vertice*, vertice*);
         void bfs (vertice, vertice*, vertice*);
-        unsigned int calcula_distancia(vertice, vertice);
+        unsigned int distancia_alvo(vertice, vertice);
         unsigned int calcula_diametro();
         void componentes_conexas();
         void informacoes();
