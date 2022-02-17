@@ -420,7 +420,6 @@ grafo_vetor_peso::bellman_ford (vertice inicio){
 
     //Loop para detecção de ciclos negativos
     bool ciclos_negativos = false;
-    vertice primeiro = 0;
     for (contador v=0; v<this->numero_de_vertices; v++){
         for (Tupla_peso& aresta_ligada: grafo[v])
         {
@@ -429,7 +428,6 @@ grafo_vetor_peso::bellman_ford (vertice inicio){
             if (dist [vizinho] > (dist[v] + peso) )
             {
                 if(not ciclos_negativos)
-                    primeiro = vizinho;
                 pai[vizinho] = v;
                 ciclos_negativos = true;
             }
